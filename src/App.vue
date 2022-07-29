@@ -1,19 +1,10 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink> |
-        <RouterLink to="/login">Login</RouterLink>
-      </nav>
-    </div>
-  </header>
-  <RouterView />
+    <RouterView />
 </template>
 
-<style scoped>
-
+<script setup>
+  import { RouterView } from "vue-router";
+</script>
+<style>
+  @import '../node_modules/bulma/css/bulma.min.css';
 </style>

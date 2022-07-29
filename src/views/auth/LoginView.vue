@@ -1,5 +1,7 @@
 <template>
-    <h1>Login</h1>
+    <div class="section">
+        <h1 class="title">Login</h1>
+    </div>
 </template>
 
 <script>
