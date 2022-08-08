@@ -1,18 +1,13 @@
 <template>
-    <section class="section">
-        <header>
-            <Navbar />
-        </header>
-    </section>
-    <section class="section">
-        <h1 class="title">Dashboard</h1>
-    </section>
+  <header>
+    <Navbar />
+  </header>
+  <h1>Dashboard</h1>
 </template>
 
 <script setup>
-    import Navbar from '@/components/common/Navbar.vue'
+import Navbar from "@/components/common/Navbar.vue";
+import Members from "@/components/Members.vue";
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
