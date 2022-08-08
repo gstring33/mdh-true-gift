@@ -5,5 +5,6 @@
 <script setup>
 import { RouterView } from "vue-router";
 </script>
-<style>
+<style lang="scss">
+  @import "~bootstrap/scss/bootstrap";
 </style>
