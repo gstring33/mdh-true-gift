@@ -3,7 +3,7 @@
         <div class="card mb-3 ">
             <div class="card-header lead py-3">Meine Liste</div>
             <div class="card-body">
-                <div class="alert alert-warning" role="alert">
+                <div v-if="!areThereAnyWishes" class="alert alert-warning" role="alert">
                     Du hast noch keine Wünsche hinzugefügt
                 </div>
                 <ol class="list-group mb-4">
@@ -57,6 +57,12 @@
         {title: "Sed diam voluptua...3"}
     ])
 
+    // ----------- Computed
+    const areThereAnyWishes = computed(() => {
+      return wishes.value.length > 0
+    })
+
+    // ----------- Methods
     const openModal = (title, id) => {
         modalTitle.value = title
         modalId.value = id
