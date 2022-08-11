@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-primary">Einen Partner auswählen</button>
+        <button type="button" class="btn btn-success">Einen Partner auswählen</button>
       </div>
     </div>
   </div>
