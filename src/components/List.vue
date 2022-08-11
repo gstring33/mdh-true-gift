@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-5">
         <div class="card mb-3 ">
-            <div class="card-header display-6 py-3">Meine Liste</div>
+            <div class="card-header lead py-3">Meine Liste</div>
             <div class="card-body">
                 <div class="alert alert-warning" role="alert">
                     Du hast noch keine Wünsche hinzugefügt
@@ -45,8 +45,9 @@
 </template>
 
 <script setup>
-    import {ref} from 'vue'
+    import { ref, computed } from 'vue'
 
+    // ----------- References
     const modalTitle = ref(null)
     const modalId = ref(null)
 
