@@ -30,11 +30,12 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
-                            {{ modalTitle }} - {{ modalId }}
+                            Möchtest du den folgenden Wunsch wirklich löschen: <br/>
+                            <i>'{{ modalTitle }}'</i>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nein</button>
-                            <button type="button" class="btn btn-danger">Entfernen</button>
+                            <button type="button" class="btn btn-success">Ja</button>
                         </div>
                     </div>
                 </div>
@@ -50,15 +51,16 @@
     const modalId = ref(null)
 
     const wishes = ref([
-        {title: "wisch1"},
-        {title: "wisch2"},
-        {title: "wisch3"}
+        {title: "Lorem ipsum...1"},
+        {title: "Yonumy eirmod tempor invidunt ut labore et dolore magna...2"},
+        {title: "Sed diam voluptua...3"}
     ])
 
     const openModal = (title, id) => {
         modalTitle.value = title
         modalId.value = id
     }
+
 </script>
 
 <style scoped>
