@@ -49,12 +49,20 @@
         <button
           @click="openOffCanvas(null, 'CREATE')"
           type="button"
-          class="btn btn-success"
+          class="btn btn-secondary"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasWishForm"
           aria-controls="offcanvasBottom"
         >
           Einen Wunsch hinzufügen
+        </button>
+        <button
+            type="button"
+            class="btn btn-success mx-3"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmModal"
+        >
+          Liste veröffentlichen
         </button>
       </div>
     </div>
@@ -81,6 +89,45 @@
                 Nein
               </button>
               <button type="button" class="btn btn-success">Ja</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+          class="modal fade"
+          id="confirmModal"
+          tabindex="-1"
+          aria-labelledby="confirmModalLabel"
+          aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h5 class="modal-title" id="confirmHeaderModalLabel">Achtung</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p class="lead">Wenn du die Veröffentlichung bestätigst:</p>
+              <ul>
+                <li>wird deine Liste <b>per E-Mail an deinen Partner gesendet</b>, ist auch <b>auf seinem Dashboard verfügbar.</b></li>
+                <li>Deine Liste wird geschlossen und du kannst <b>keine neuen Wünsche mehr bearbeiten oder hinzufügen.</b></li>
+              </ul>
+
+              <p>Möchtest du die Veröffentlichung deiner Liste bestätigen?</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+              >
+                Nein
+              </button>
+              <button
+                  type="button"
+                  class="btn btn-success">
+                Veröffentlichen
+              </button>
             </div>
           </div>
         </div>
