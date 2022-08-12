@@ -8,82 +8,9 @@
           <p>Ella hat ihre Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um Ellas Liste zu sehen.</p>
         </div>
         <div class="row mb-4">
-          <div class="row align-items-start mb-md-3">
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-man-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">John D.</span>
-            </div>
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-man-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Patrick C.</span>
-            </div>
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-man-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Steven V.</span>
-            </div>
-          </div>
-          <div class="row align-items-center mb-md-3">
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-girl-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Emily V.</span>
-            </div>
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-man-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Karl Y.</span>
-            </div>
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-girl-success.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_success"><font-awesome-icon :icon="['fas', 'check']" class="me-2"/> Ella T.</span>
-            </div>
-          </div>
-          <div class="row align-items-end">
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-girl-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Stefany L.</span>
-            </div>
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 4px"
-                src="@/assets/images/user-girl-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Julia S.</span>
-            </div>
-            <div class="col col-12 col-md-4">
-              <img
-                style="width: 50px; position: relative; bottom: 2px"
-                src="@/assets/images/user-girl-disable.png"
-                alt="user-profil"
-              />
-              <span class="username-profil username-profil_disable">Sophie K.</span>
+          <div v-for="(partnerLine, index) in partnersNormalized" class="row mb-md-3" :class="index == partnerLine.length - 1 ? 'align-items-end' : 'align-items-start'">
+            <div v-for="partner in partnerLine" class="col col-12 col-md-4">
+              <MemberItem :partner="partner" :isSelectionAllowed="isSelectionAllowed" :image="partner.img"/>
             </div>
           </div>
         </div>
@@ -97,27 +24,38 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import MemberItem from './MemberItem.vue'
 
+// ---------- Refs
 const isPartnerNotSelected = ref(false)
 const isPartnersListPublished = ref(false)
+const isSelectionAllowed = ref(false)
+const partners = ref([
+  {name: 'Sophie K.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
+  {name: 'Karl D.', gender: 'M', img:"user-man-disable.png", isSelected: false},
+  {name: 'Mats W.', gender: 'M', img:"user-man-disable.png", isSelected: false},
+  {name: 'Julia S.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
+  {name: 'Tatiana R.', gender: 'F', img:"user-girl-success.png", isSelected: true},
+  {name: 'Suzanne E.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
+  {name: 'Kentin N.', gender: 'M', img:"user-man-disable.png", isSelected: false},
+  {name: 'Frank. D', gender: 'M', img:"user-man-disable.png", isSelected: false},
+  {name: 'Simone A.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
+  {name: 'Georg Q.', gender: 'M', img:"user-man-disable.png", isSelected: false},
+])
 
+// ---------- Computed
+const partnersNormalized = computed(() => {
+  const partnersArr  = []
+  let partnerLine = [];
+  partners.value.forEach((p) => {
+    partnerLine.push(p)
+    if(partnerLine.length === 3) {
+      partnersArr.push(partnerLine)
+      partnerLine = []
+    }
+  })
+
+  return partnersArr
+})
 </script>
-
-<style lang="scss">
-.username-profil {
-  margin-left: 8px;
-  &_disable {
-    color: #dee2e6;
-  }
-
-  &_success {
-    color: white;
-    font-weight: 500;
-    padding: 8px 16px;
-    border: 1px solid #198754;
-    background-color: #198754;
-    border-radius: 6px;
-  }
-}
-</style>
