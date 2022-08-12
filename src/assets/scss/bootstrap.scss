@@ -1,0 +1,23 @@
+$primary: #59359a;
+$secondary: #fd9843;
+$success: #75b798;
+$info: #9ec5fe;
+$warning: #ffda6a;
+$danger: #e35d6a;
+$light: #c5b3e6;
+$dark: #2c1a4d;
+$gray-light: gray;
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.btn-success {
+  color: #FFFF;
+}
+
+.alert-warning {
+  background-color: $warning;
+}
+
+
+
+

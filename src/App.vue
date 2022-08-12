@@ -9,6 +9,3 @@ import Navbar from "@/components/common/Navbar.vue";
 
 const isLogged = true;
 </script>
-<style lang="scss">
-@import "~bootstrap/scss/bootstrap";
-</style>
