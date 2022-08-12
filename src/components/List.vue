@@ -25,22 +25,22 @@
                 <button
                   @click="openOffCanvas(wish, 'UPDATE')"
                   type="button"
-                  class="btn btn-dark btn-sm"
+                  class="btn btn-outline-secondary btn-sm"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasWishForm"
                   aria-controls="offcanvasBottom"
                 >
-                  Bearbeiten
+                  <font-awesome-icon :icon="['fas', 'marker']" class="me-1" />
                 </button>
                 <button
                   @click="openModalDelete(wish)"
                   type="button"
-                  class="btn btn-danger btn-sm"
+                  class="btn btn-outline-danger btn-sm"
                   data-bs-toggle="modal"
                   data-bs-target="#deleteModal"
                   ref="wisch1"
                 >
-                  Entfernen
+                  <font-awesome-icon :icon="['fas', 'trash-can']" class="me-1" />
                 </button>
               </div>
             </div>
@@ -49,20 +49,20 @@
         <button
           @click="openOffCanvas(null, 'CREATE')"
           type="button"
-          class="btn btn-secondary"
+          class="btn btn-success"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasWishForm"
           aria-controls="offcanvasBottom"
         >
-          Einen Wunsch hinzufügen
+          <font-awesome-icon :icon="['fas', 'cart-plus']" class="me-2" /> Einen Wunsch hinzufügen
         </button>
         <button
             type="button"
-            class="btn btn-success mx-3"
+            class="btn btn-outline-success mx-3"
             data-bs-toggle="modal"
             data-bs-target="#confirmModal"
         >
-          Liste veröffentlichen
+          <font-awesome-icon :icon="['fas', 'paper-plane']" class="me-2" /> Liste veröffentlichen
         </button>
       </div>
     </div>
@@ -86,9 +86,9 @@
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Nein
+                <font-awesome-icon :icon="['fas', 'xmark']" class="me-2" /> Nein
               </button>
-              <button type="button" class="btn btn-success">Ja</button>
+              <button type="button" class="btn btn-success"><font-awesome-icon :icon="['fas', 'check']" class="me-2" />Ja</button>
             </div>
           </div>
         </div>
@@ -118,15 +118,15 @@
             <div class="modal-footer">
               <button
                   type="button"
-                  class="btn btn-secondary"
+                  class="btn btn-outline-danger"
                   data-bs-dismiss="modal"
               >
-                Nein
+                <font-awesome-icon :icon="['fas', 'xmark']" class="me-2"/>Nein
               </button>
               <button
                   type="button"
                   class="btn btn-success">
-                Veröffentlichen
+                <font-awesome-icon :icon="['fas', 'check']" class="me-2" />Veröffentlichen
               </button>
             </div>
           </div>
@@ -142,7 +142,8 @@
       >
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasWishFormLabel">
-            {{ formTitle }}
+            <span v-if="wishFormType === 'UPDATE'"> <font-awesome-icon :icon="['fas', 'marker']" class="me-2" />Wunsch bearbeiten</span>
+            <span v-else> <font-awesome-icon :icon="['fas', 'cart-plus']" class="me-2" />Wunsch erstellen</span>
           </h5>
           <button
             type="button"
@@ -194,12 +195,6 @@ const wishes = ref([
 ]);
 
 // ----------- Computed
-const formTitle = computed(() => {
-  return wishFormType.value === "UPDATE"
-    ? "Wunsch bearbeiten"
-    : "Wunsch erstellen";
-});
-
 const areThereAnyWishes = computed(() => {
   return wishes.value.length > 0;
 });

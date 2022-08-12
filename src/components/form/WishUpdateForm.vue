@@ -32,7 +32,7 @@
         aria-describedby="wishLinkHelp"
       />
     </div>
-    <button type="submit" class="btn btn-success">Speichern</button>
+    <button type="submit" class="btn btn-success"><font-awesome-icon :icon="['fas', 'floppy-disk']" class="me-2" />Speichern</button>
   </form>
 </template>
 

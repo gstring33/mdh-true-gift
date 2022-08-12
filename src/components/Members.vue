@@ -57,7 +57,7 @@
                 src="@/assets/images/user-girl-success.png"
                 alt="user-profil"
               />
-              <span class="username-profil username-profil_success">Ella T.</span>
+              <span class="username-profil username-profil_success"><font-awesome-icon :icon="['fas', 'check']" class="me-2"/> Ella T.</span>
             </div>
           </div>
           <div class="row align-items-end">

@@ -5,10 +5,17 @@ import App from "./App.vue";
 import router from "./router";
 
 import "./assets/main.css";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faMarker, faTrashCan, faCartPlus, faPaperPlane, faCheck, faUser, faXmark, faFloppyDisk} from  "@fortawesome/free-solid-svg-icons";
 
 const app = createApp(App);
 
+library.add(faMarker, faTrashCan, faCartPlus, faPaperPlane, faCheck, faUser, faXmark, faFloppyDisk)
+
 app.use(createPinia());
 app.use(router);
+
+app.component("font-awesome-icon", FontAwesomeIcon)
 
 app.mount("#app");

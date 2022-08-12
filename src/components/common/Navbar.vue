@@ -13,17 +13,17 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="btn-group">
+      <div>
         <button
-          class="btn btn-secondary dropdown-toggle"
+          class="btn btn-outline-secondary rounded-5"
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          Einstellungen
+          <font-awesome-icon :icon="['fas', 'user']"/>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><h6 class="dropdown-header">Einstellungen</h6></li>
+          <li><h6 class="dropdown-header">Profil</h6></li>
           <li class="dropdown-item"><h5>John Doe</h5></li>
           <li class="dropdown-item">john.doe@email.de</li>
           <li><hr class="dropdown-divider" /></li>
