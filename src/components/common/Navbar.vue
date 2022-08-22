@@ -1,7 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-primary mb-5">
+  <nav class="navbar navbar-expand-lg mb-5">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">
+        <img :src="logoUrl" width="110">
       </router-link>
       <button
         class="navbar-toggler"
@@ -41,6 +42,12 @@
 import { RouterLink } from "vue-router";
 // eslint-disable-next-line
 import { Dropdown } from "bootstrap";
+
+const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+ .navbar {
+   border-bottom: 1px solid #eee9f7;
+ }
+</style>
