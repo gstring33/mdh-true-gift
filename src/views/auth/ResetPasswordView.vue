@@ -16,7 +16,7 @@
           <label for="floatingPassword">Neues Passwort bestätigen</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary mt-5" type="submit">
-          <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" class="me-3" />Senden
+          <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" class="me-3" />Passwort zurück setzen
         </button>
       </form>
     </main>
