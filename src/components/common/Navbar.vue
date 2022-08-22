@@ -28,11 +28,9 @@
           <li class="dropdown-item"><h5>John Doe</h5></li>
           <li class="dropdown-item">john.doe@email.de</li>
           <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="#">Item 1</a></li>
-          <li><a class="dropdown-item" href="#">Item 2</a></li>
-          <li><a class="dropdown-item" href="#">Item 3</a></li>
+          <li><a class="dropdown-item" href="/admin">Admin</a></li>
           <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="#">Logout</a></li>
+          <li><a class="dropdown-item" href="#"><font-awesome-icon :icon="['fas', 'arrow-up-right-from-square']"/> Logout</a></li>
         </ul>
       </div>
     </div>
