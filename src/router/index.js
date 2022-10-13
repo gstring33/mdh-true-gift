@@ -1,21 +1,33 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import DashboardView from "../views/DashboardView.vue";
 import LoginView from "../views/auth/LoginView.vue";
+import ResetPasswordView from "../views/auth/ResetPasswordView.vue";
+import AdminView from "../views/admin/AdminView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      name: "home",
-      component: HomeView,
+      name: "dashboard",
+      component: DashboardView,
     },
     {
       path: "/login",
       name: "login",
       component: LoginView,
+    },
+    {
+      path: "/reset-password",
+      name: "resetPassword",
+      component: ResetPasswordView
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: AdminView
     }
-  ],
-});
+    ]
+})
 
 export default router;

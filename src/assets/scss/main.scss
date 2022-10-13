@@ -1,0 +1,22 @@
+@import './bootstrap';
+
+.partner-img {
+  width: 50px;
+  position: relative;
+  bottom: 2px
+}
+
+.partner-name {
+  margin-left: 8px;
+  &_disable {
+    color: #dee2e6;
+  }
+
+  &_success {
+    color: white;
+    padding: 8px 16px;
+    border: 1px solid $success;
+    background-color: $success;
+    border-radius: 6px;
+  }
+}

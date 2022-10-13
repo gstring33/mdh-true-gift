@@ -1,19 +1,11 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink> |
-        <RouterLink to="/login">Login</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <Navbar v-if="isLogged" />
   <RouterView />
 </template>
 
-<style scoped>
+<script setup>
+import { RouterView } from "vue-router";
+import Navbar from "@/components/common/Navbar.vue";
 
-</style>
+const isLogged = true;
+</script>
