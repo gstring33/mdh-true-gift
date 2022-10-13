@@ -1,13 +1,8 @@
 {
   "name": "mdh-true-gift",
   "version": "1.0.0",
-  "engines": {
-    "node": "16.6.1",
-    "npm": "7.x"
-  },
   "scripts": {
     "dev": "vite",
-    "start": "vite",
     "build": "vite build",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
