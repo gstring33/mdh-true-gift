@@ -1,6 +1,10 @@
 {
   "name": "mdh-true-gift",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "engines": {
+    "node": "16.6.1",
+    "npm": "7.x"
+  },
   "scripts": {
     "dev": "vite",
     "start": "vite",
