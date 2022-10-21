@@ -43,7 +43,7 @@ import { RouterLink } from "vue-router";
 // eslint-disable-next-line
 import { Dropdown } from "bootstrap";
 
-const logoUrl = new URL('@/assets/images/true-gift-logo.png', import.meta.url).href
+const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
 </script>
 
 <style lang="scss" scoped>

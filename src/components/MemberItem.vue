@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from "vue"
+import { computed, defineProps} from "vue"
 
   // ---------- Props
   const props = defineProps({
@@ -31,7 +31,7 @@ import { computed, defineProps } from "vue"
     return "partner-name"
   })
 
-  const imgUrl = new URL(`@/assets/images/${props.image}.png`, import.meta.url).href
+  const imgUrl = new URL(`../assets/images/${props.image}.png`, import.meta.url).href
 
 </script>
 
