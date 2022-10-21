@@ -1,7 +1,7 @@
 <template>
     <img
         class="partner-img"
-        :src="imgSrc"
+        :src="imgUrl"
         alt="user-profil"
     />
   <span :class="partnerNameClass">
@@ -11,10 +11,8 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, onMounted} from "vue"
+import { computed, defineProps } from "vue"
 
-  // ---------- Ref
-  const imgSrc = ref(null)
   // ---------- Props
   const props = defineProps({
     partner: Object,
@@ -33,9 +31,7 @@ import { ref, computed, defineProps, onMounted} from "vue"
     return "partner-name"
   })
 
-  onMounted (() => {
-    imgSrc.value = new URL('../assets/images/' + props.image, import.meta.url).href
-  })
+  const imgUrl = new URL(`@/assets/images/${props.image}.png`, import.meta.url).href
 
 </script>
 

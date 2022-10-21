@@ -32,16 +32,16 @@ const isPartnerNotSelected = ref(false)
 const isPartnersListPublished = ref(false)
 const isSelectionAllowed = ref(false)
 const partners = ref([
-  {name: 'Sophie K.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
-  {name: 'Karl D.', gender: 'M', img:"user-man-disable.png", isSelected: false},
-  {name: 'Mats W.', gender: 'M', img:"user-man-disable.png", isSelected: false},
-  {name: 'Julia S.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
-  {name: 'Tatiana R.', gender: 'F', img:"user-girl-success.png", isSelected: true},
-  {name: 'Suzanne E.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
-  {name: 'Kentin N.', gender: 'M', img:"user-man-disable.png", isSelected: false},
-  {name: 'Frank. D', gender: 'M', img:"user-man-disable.png", isSelected: false},
-  {name: 'Simone A.', gender: 'F', img:"user-girl-disable.png", isSelected: false},
-  {name: 'Georg Q.', gender: 'M', img:"user-man-disable.png", isSelected: false},
+  {name: 'Sophie K.', gender: 'F', img:"user-girl-disable", isSelected: false},
+  {name: 'Karl D.', gender: 'M', img:"user-man-disable", isSelected: false},
+  {name: 'Mats W.', gender: 'M', img:"user-man-disable", isSelected: false},
+  {name: 'Julia S.', gender: 'F', img:"user-girl-disable", isSelected: false},
+  {name: 'Tatiana R.', gender: 'F', img:"user-girl-success", isSelected: true},
+  {name: 'Suzanne E.', gender: 'F', img:"user-girl-disable", isSelected: false},
+  {name: 'Kentin N.', gender: 'M', img:"user-man-disable", isSelected: false},
+  {name: 'Frank. D', gender: 'M', img:"user-man-disable", isSelected: false},
+  {name: 'Simone A.', gender: 'F', img:"user-girl-disable", isSelected: false},
+  {name: 'Georg Q.', gender: 'M', img:"user-man-disable", isSelected: false},
 ])
 
 // ---------- Computed
