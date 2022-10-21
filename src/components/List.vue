@@ -103,7 +103,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header bg-warning">
-              <h5 class="modal-title" id="confirmHeaderModalLabel">Achtung</h5>
+              <h5 class="modal-title" id="confirmHeaderModalLabel"><font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" /> Achtung</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

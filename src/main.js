@@ -18,7 +18,8 @@ import {
     faArrowRightToBracket,
     faArrowUpRightFromSquare,
     faPlus,
-    faCirclePause
+    faCirclePause,
+    faTriangleExclamation
 } from  "@fortawesome/free-solid-svg-icons";
 
 import "./assets/scss/main.scss";
@@ -37,7 +38,8 @@ library.add(
     faArrowRightToBracket,
     faArrowUpRightFromSquare,
     faPlus,
-    faCirclePause
+    faCirclePause,
+    faTriangleExclamation
 )
 
 app.use(createPinia());

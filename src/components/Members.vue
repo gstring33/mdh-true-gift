@@ -1,12 +1,11 @@
 <template>
   <div class="container">
+    <div class="tg-alert tg-alert-warning" role="alert">
+      <b><font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-1"/> Noch ein wenig Geduld...</b> Ella hat ihre Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um Ellas Liste zu sehen.
+    </div>
     <div class="card mb-3">
       <div class="card-header py-3 lead">Teilnehmer (9)</div>
       <div class="card-body">
-        <div class="alert alert-warning" role="alert">
-          <h4 class="alert-heading">Noch ein wenig Geduld ...</h4>
-          <p>Ella hat ihre Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um Ellas Liste zu sehen.</p>
-        </div>
         <div class="row mb-4">
           <div v-for="(partnerLine, index) in partnersNormalized" class="row mb-md-3" :class="index == partnerLine.length - 1 ? 'align-items-end' : 'align-items-start'">
             <div v-for="partner in partnerLine" class="col col-12 col-md-4">
