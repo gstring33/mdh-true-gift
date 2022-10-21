@@ -11,6 +11,7 @@ const router = createRouter({
       path: "/",
       name: "dashboard",
       component: DashboardView,
+      meta: { requiresAuth: true }
     },
     {
       path: "/login",
@@ -25,9 +26,19 @@ const router = createRouter({
     {
       path: "/admin",
       name: "admin",
-      component: AdminView
+      component: AdminView,
+      meta: { requiresAuth: true }
     }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+  const user = false
+  if (to.meta.requiresAuth && !user) {
+    next ({ name : 'login'})
+  }
+
+  next()
 })
 
 export default router;
