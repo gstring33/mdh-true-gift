@@ -55,7 +55,7 @@
 
 <script setup>
 import {ref } from "vue";
-import UserCreateForm from "../../../src/components/form/UserCreateForm.vue";
+import UserCreateForm from "@/components/form/UserCreateForm.vue";
 
 const users = ref([
   {name: 'Sophie K.', email: 'test@test.com', firstTimeConnected: "April, 19 2022"},

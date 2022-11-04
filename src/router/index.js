@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
+import accountRoutes from "@/router/routes/account.routes.js";
+import adminRoutes from "@/router/routes/admin.routes.js";
 import DashboardView from "@/views/DashboardView.vue";
 import { useAuthStore } from "@/stores/auth.store.js";
-import LoginView from "@/views/auth/LoginView.vue";
-import ResetPasswordView from "@/views/auth/ResetPasswordView.vue";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,17 +13,8 @@ export const router = createRouter({
       component: DashboardView,
       meta: { requiresAuth: true }
     },
-    {
-      path: "/account/login",
-      name: "login",
-      component: LoginView,
-    },
-    {
-      path: "/account/reset-password",
-      name: "resetPassword",
-      component: ResetPasswordView,
-      meta: { requiresAuth: true }
-    },
+    {... accountRoutes},
+    {... adminRoutes},
     { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 });
