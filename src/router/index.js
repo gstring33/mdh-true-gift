@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import DashboardView from "../views/DashboardView.vue";
-import LoginView from "../views/auth/LoginView.vue";
-import ResetPasswordView from "../views/auth/ResetPasswordView.vue";
-import AdminView from "../views/admin/AdminView.vue";
+import DashboardView from "@/views/DashboardView.vue";
+import { useAuthStore } from "@/stores/auth.store.js";
+import LoginView from "@/views/auth/LoginView.vue";
+import ResetPasswordView from "@/views/auth/ResetPasswordView.vue";
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -14,31 +14,29 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: "/login",
+      path: "/account/login",
       name: "login",
       component: LoginView,
     },
     {
-      path: "/reset-password",
+      path: "/account/reset-password",
       name: "resetPassword",
-      component: ResetPasswordView
-    },
-    {
-      path: "/admin",
-      name: "admin",
-      component: AdminView,
+      component: ResetPasswordView,
       meta: { requiresAuth: true }
-    }
-    ]
-})
+    },
+    { path: '/:pathMatch(.*)*', redirect: '/' }
+  ]
+});
 
 router.beforeEach((to, from, next) => {
-  const user = false
-  if (to.meta.requiresAuth && !user) {
-    next ({ name : 'login'})
+  const authStore = useAuthStore()
+  console.log(authStore.user)
+  if (to.meta.requiresAuth && !authStore.user) {
+    authStore.returnUrl = to.fullPath
+    router.push('/account/login');
   }
 
-  next()
-})
+  next();
+});
 
 export default router;

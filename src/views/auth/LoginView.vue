@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <main class="form-signin">
-      <form class="text-center">
+      <form @submit.prevent="onSubmit" class="text-center">
         <h1 class="h3 mb-5 fw-normal mt-5">Bitte anmelden</h1>
         <div class="form-floating">
-          <input type="email" class="form-control" placeholder="name@example.com">
+          <input v-model="email" type="email" class="form-control" placeholder="name@example.com">
           <label for="floatingInput">Email Addresse</label>
         </div>
         <div class="form-floating">
-          <input type="password" class="form-control" placeholder="Password">
+          <input v-model="password" type="password" class="form-control" placeholder="Password">
           <label for="floatingPassword">Passwort</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary mt-5" type="submit">
@@ -19,7 +19,17 @@
   </div>
 </template>
 
-<script scoped>
+<script setup>
+  import { ref } from 'vue'
+  import { useAuthStore } from "@/stores/auth.store.js";
+
+  const email = ref('')
+  const password = ref('')
+
+  async function onSubmit () {
+    const authStore = useAuthStore()
+    await authStore.login(email.value, password.value)
+  }
 
 </script>
 
