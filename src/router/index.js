@@ -21,7 +21,6 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
-  console.log(authStore.user)
   if (to.meta.requiresAuth && !authStore.user) {
     authStore.returnUrl = to.fullPath
     router.push('/account/login');
