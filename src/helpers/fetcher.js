@@ -21,12 +21,7 @@ function request(method) {
             options.body = JSON.stringify(body)
         }
 
-         const data = await fetch(url, options)
-            .then(handleResponse)
-            .catch((error) => {
-                console.error('Error:', error);
-                console.log("server is down!! " + error)
-            });
+         const data = await fetch(url, options).then(handleResponse)
 
         return data
     }
@@ -46,5 +41,14 @@ function authHeader(url) {
 async function handleResponse(response) {
     const isJson = response.headers?.get('content-type')?.includes('application/json');
     const data = isJson ? await response.json() : null;
+    if(!response.ok) {
+        const { user } = useAuthStore();
+       if ([401,403].includes(response.status) && user)  {
+           //Logout
+       }
+       const error = (data && data.message) || response.status;
+       return Promise.reject(error)
+    }
+
     return data;
 }

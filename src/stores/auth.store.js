@@ -11,9 +11,15 @@ export const useAuthStore = defineStore('auth', () => {
     let user = ref(false);
 
     async function login (email, password) {
-        const data = await fetcher.post(authUrl, {email, password})
-        user.value = data
-        router.push('/')
+        try {
+            const data = await fetcher.post(authUrl, {email, password})
+            this.user = data
+            localStorage.setItem('token', data.token)
+            router.push('/')
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return {
