@@ -21,7 +21,7 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
-  if (to.meta.requiresAuth && !authStore.user) {
+  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
     authStore.returnUrl = to.fullPath
     router.push('/account/login');
   }
