@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="mt-5 text-center">
+      <img :src="logoUrl"  class="text-center" width="180">
+    </div>
     <main class="form-signin">
       <Toast :class="toastClass"></Toast>
       <form class="text-center">
@@ -28,6 +31,7 @@
 
   const email = ref('')
   const password = ref('')
+  const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
   const toastClass = {'bg-warning' : true}
 
   async function onSubmit () {
