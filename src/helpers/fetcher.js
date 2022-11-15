@@ -45,8 +45,8 @@ async function handleResponse(response) {
        if ([401,403].includes(response.status) && user)  {
            //Logout
        }
-       const error = (data && data.message) || response.status;
-       return Promise.reject(error)
+       //const error = (data && data.message) || response.status;
+       return Promise.reject(data)
     }
 
     return data;
