@@ -41,12 +41,7 @@ async function handleResponse(response) {
     const isJson = response.headers?.get('content-type')?.includes('application/json');
     const data = isJson ? await response.json() : null;
     if(!response.ok) {
-        const { user } = useAuthStore();
-       if ([401,403].includes(response.status) && user)  {
-           //Logout
-       }
-       //const error = (data && data.message) || response.status;
-       return Promise.reject(data)
+        return Promise.reject(data)
     }
 
     return data;

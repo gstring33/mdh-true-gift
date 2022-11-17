@@ -27,6 +27,7 @@ import {ref} from "vue";
 import MemberItem from './MemberItem.vue'
 import { onBeforeMount } from "vue";
 import { fetcher } from "@/helpers/fetcher.js";
+import { useAuthStore } from "@/stores/auth.store.js";
 
 const total = ref(null)
 const users = ref(null)
@@ -45,8 +46,10 @@ onBeforeMount(async () => {
     })
     total.value = data.total
     users.value = usersArr
+
   } catch (error) {
-      console.log(error)
+      const { logout } = useAuthStore();
+      logout()
   }
 })
 
