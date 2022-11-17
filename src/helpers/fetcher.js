@@ -28,7 +28,8 @@ function request(method) {
 }
 
 function authHeader(url) {
-    const token = localStorage.getItem('token')
+    const auth = useAuthStore();
+    const token = auth.user()?.token
     const isApiUrl = url.startsWith(import.meta.env.VITE_API_BASE_URL)
     if (token && isApiUrl) {
         return { Authorization: `Bearer ${token}`};
