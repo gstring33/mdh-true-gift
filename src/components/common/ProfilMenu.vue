@@ -10,10 +10,10 @@
     </button>
     <ul class="dropdown-menu">
       <li><h6 class="dropdown-header">Profil</h6></li>
-      <li class="dropdown-item"><h5>John Doe</h5></li>
-      <li class="dropdown-item">john.doe@email.de</li>
-      <li><hr class="dropdown-divider" /></li>
-      <li><a class="dropdown-item" href="/admin">Admin</a></li>
+      <li class="dropdown-item"><h5>{{ `${user.firstname}  ${user.lastname}`}}</h5></li>
+      <li class="dropdown-item">{{ user.email }}</li>
+      <li v-if="user.isAdmin"><hr class="dropdown-divider" /></li>
+      <li v-if="user.isAdmin"><a class="dropdown-item" href="/admin">Admin</a></li>
       <li><hr class="dropdown-divider" /></li>
       <li>
         <a class="dropdown-item" @click="logout">
@@ -28,8 +28,10 @@
 
 import { useAuthStore } from "@/stores/auth.store.js";
 
+const auth = useAuthStore()
+const user = auth.user()
+
 const logout = function () {
-  const authStore = useAuthStore()
-  authStore.logout()
+  auth.logout()
 }
 </script>
