@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="btn-group dropstart">
     <button
         class="btn btn-outline-secondary rounded-5"
         type="button"
@@ -8,7 +8,7 @@
     >
       <font-awesome-icon :icon="['fas', 'user']"/>
     </button>
-    <ul class="dropdown-menu dropdown-menu-end">
+    <ul class="dropdown-menu">
       <li><h6 class="dropdown-header">Profil</h6></li>
       <li class="dropdown-item"><h5>John Doe</h5></li>
       <li class="dropdown-item">john.doe@email.de</li>
