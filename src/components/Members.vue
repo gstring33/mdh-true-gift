@@ -1,16 +1,15 @@
 <template>
   <div class="container">
+    <div class="tg-alert tg-alert-warning" role="alert">
+      <b><font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-1"/> Noch ein wenig Geduld...</b> Ella hat ihre Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um Ellas Liste zu sehen.
+    </div>
     <div class="card mb-3">
-      <div class="card-header py-3 lead">Teilnehmer (9)</div>
+      <div class="card-header py-3 lead">Teilnehmer ({{ total }})</div>
       <div class="card-body">
-        <div class="alert alert-warning" role="alert">
-          <h4 class="alert-heading">Noch ein wenig Geduld ...</h4>
-          <p>Ella hat ihre Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um Ellas Liste zu sehen.</p>
-        </div>
         <div class="row mb-4">
-          <div v-for="(partnerLine, index) in partnersNormalized" class="row mb-md-3" :class="index == partnerLine.length - 1 ? 'align-items-end' : 'align-items-start'">
-            <div v-for="partner in partnerLine" class="col col-12 col-md-4">
-              <MemberItem :partner="partner" :isSelectionAllowed="isSelectionAllowed" :image="partner.img"/>
+          <div v-for="(userLine, index) in users" class="row mb-md-3" :class="index == userLine.length - 1 ? 'align-items-end' : 'align-items-start'">
+            <div v-for="user in userLine" class="col col-12 col-md-4">
+              <MemberItem :user="user"/>
             </div>
           </div>
         </div>
@@ -24,38 +23,38 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import {ref} from "vue";
 import MemberItem from './MemberItem.vue'
+import { onBeforeMount } from "vue";
+import { fetcher } from "@/helpers/fetcher.js";
+import { useAuthStore } from "@/stores/auth.store.js";
+
+const total = ref(null)
+const users = ref(null)
+
+onBeforeMount(async () => {
+  try {
+    const data = await fetcher.get(import.meta.env.VITE_API_BASE_URL + '/api/dashboard/users')
+    const usersArr  = []
+    let userLine = [];
+    data.users.forEach((p) => {
+      userLine.push(p)
+      if(userLine.length === 3 || (userLine.length === data.total && data.total < 3) ) {
+        usersArr.push(userLine)
+        userLine = []
+      }
+    })
+    total.value = data.total
+    users.value = usersArr
+
+  } catch (error) {
+      const { logout } = useAuthStore();
+      logout()
+  }
+})
 
 // ---------- Refs
 const isPartnerNotSelected = ref(false)
 const isPartnersListPublished = ref(false)
-const isSelectionAllowed = ref(false)
-const partners = ref([
-  {name: 'Sophie K.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Karl D.', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Mats W.', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Julia S.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Tatiana R.', gender: 'F', img:"user-girl-success", isSelected: true},
-  {name: 'Suzanne E.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Kentin N.', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Frank. D', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Simone A.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Georg Q.', gender: 'M', img:"user-man-disable", isSelected: false},
-])
 
-// ---------- Computed
-const partnersNormalized = computed(() => {
-  const partnersArr  = []
-  let partnerLine = [];
-  partners.value.forEach((p) => {
-    partnerLine.push(p)
-    if(partnerLine.length === 3) {
-      partnersArr.push(partnerLine)
-      partnerLine = []
-    }
-  })
-
-  return partnersArr
-})
 </script>

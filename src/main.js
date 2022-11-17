@@ -4,6 +4,8 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 
+import '@popperjs/core';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -18,7 +20,8 @@ import {
     faArrowRightToBracket,
     faArrowUpRightFromSquare,
     faPlus,
-    faCirclePause
+    faCirclePause,
+    faTriangleExclamation
 } from  "@fortawesome/free-solid-svg-icons";
 
 import "./assets/scss/main.scss";
@@ -37,7 +40,8 @@ library.add(
     faArrowRightToBracket,
     faArrowUpRightFromSquare,
     faPlus,
-    faCirclePause
+    faCirclePause,
+    faTriangleExclamation
 )
 
 app.use(createPinia());

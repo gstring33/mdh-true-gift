@@ -5,8 +5,8 @@
         alt="user-profil"
     />
   <span :class="partnerNameClass">
-    <font-awesome-icon v-if="partner.isSelected" :icon="['fas', 'check']" class="me-1"/>
-    {{ props.partner.name}}
+    <font-awesome-icon v-if="props.user.isSelected" :icon="['fas', 'check']" class="me-1"/>
+    {{ props.user.fullname }}
   </span>
 </template>
 
@@ -15,23 +15,23 @@ import { computed, defineProps} from "vue"
 
   // ---------- Props
   const props = defineProps({
-    partner: Object,
-    isSelectionAllowed: Boolean,
-    image: String
+    user: Object,
   })
 
   // ---------- Computed
   const partnerNameClass = computed (() => {
-    if (props.partner.isSelected && !props.isSelectionAllowed) {
+    if(props.user.isPartner === null) {
+      return
+    }else if(props.user.isPartner) {
       return "partner-name partner-name_success"
-    }else if (!props.partner.isSelected && !props.isSelectionAllowed){
+    }else if (!props.user.isPartner){
       return "partner-name partner-name_disable"
     }
 
     return "partner-name"
   })
 
-  const imgUrl = new URL(`../assets/images/${props.image}.png`, import.meta.url).href
+  const imgUrl = new URL(`../assets/images/${props.user.img}.png`, import.meta.url).href
 
 </script>
 
