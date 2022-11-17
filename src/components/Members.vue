@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import {ref, computed, defineProps, reactive} from "vue";
+import {ref} from "vue";
 import MemberItem from './MemberItem.vue'
 import { onBeforeMount } from "vue";
 import { fetcher } from "@/helpers/fetcher.js";
@@ -46,39 +46,12 @@ onBeforeMount(async () => {
     total.value = data.total
     users.value = usersArr
   } catch (error) {
-    console.log(error)
+      console.log(error)
   }
 })
 
 // ---------- Refs
 const isPartnerNotSelected = ref(false)
 const isPartnersListPublished = ref(false)
-const isSelectionAllowed = ref(false)
-const partners = ref([
-  {name: 'Sophie K.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Karl D.', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Mats W.', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Julia S.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Tatiana R.', gender: 'F', img:"user-girl-success", isSelected: true},
-  {name: 'Suzanne E.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Kentin N.', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Frank. D', gender: 'M', img:"user-man-disable", isSelected: false},
-  {name: 'Simone A.', gender: 'F', img:"user-girl-disable", isSelected: false},
-  {name: 'Georg Q.', gender: 'M', img:"user-man-disable", isSelected: false},
-])
 
-// ---------- Computed
-const usersNormalized = computed(() => {
-  const usersArr  = []
-  let userLine = [];
-  users.value.forEach((p) => {
-    userLine.push(p)
-    if(userLine.length === 3) {
-      usersArr.push(userLine)
-      userLine = []
-    }
-  })
-
-  return usersArr
-})
 </script>
