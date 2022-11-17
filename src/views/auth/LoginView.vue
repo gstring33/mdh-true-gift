@@ -27,7 +27,6 @@
   import Toast from '@/components/common/Toast.vue';
   import { ref } from 'vue';
   import { useAuthStore } from "@/stores/auth.store.js";
-  import { useToastStore } from "@/stores/toast.store.js";
 
   const email = ref('')
   const password = ref('')
@@ -36,11 +35,7 @@
 
   async function onSubmit () {
     const authStore = useAuthStore()
-    const toastStore = useToastStore()
-    const data = await authStore.login(email.value, password.value)
-    if ([401, 403].includes(data.code)) {
-      toastStore.show({message: data.message})
-    }
+    await authStore.login(email.value, password.value)
   }
 </script>
 

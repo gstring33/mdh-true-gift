@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue'
 import { router } from '@/router'
 import { fetcher } from "@/helpers/fetcher.js";
+import { useToastStore } from "@/stores/toast.store.js";
 
 const authUrl = import.meta.env.VITE_API_BASE_URL + '/api/login_check';
 
@@ -18,7 +19,8 @@ export const useAuthStore = defineStore('auth', () => {
             router.push('/')
 
         } catch (error) {
-            return error
+            const toastStore = useToastStore()
+            toastStore.show({message: error.message})
         }
     }
 
