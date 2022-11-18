@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="mt-5 text-center">
+      <img :src="logoUrl"  class="text-center" width="180">
+    </div>
     <main class="form-reset-password">
       <form class="text-center">
         <h1 class="h3 mb-5 fw-normal mt-5">Bitte setzen Sie Ihr Passwort zurück</h1>
@@ -23,7 +26,8 @@
   </div>
 </template>
 
-<script scoped>
+<script setup>
+const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
 
 </script>
 
