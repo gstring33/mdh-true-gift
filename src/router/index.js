@@ -27,6 +27,10 @@ router.beforeEach((to, from, next) => {
     router.push('/account/login');
   }
 
+  if (to.meta.requiresAuth && !user.isActive) {
+    router.push('/account/reset-password');
+  }
+
   next();
 });
 

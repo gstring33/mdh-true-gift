@@ -12,8 +12,7 @@ export default {
         {
             path: 'reset-password',
             name: 'resetPassword',
-            component: ResetPasswordView,
-            meta: { requiresAuth: true }
+            component: ResetPasswordView
         },
     ]
 };
