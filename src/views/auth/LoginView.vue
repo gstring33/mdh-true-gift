@@ -14,8 +14,9 @@
           <input v-model="password" type="password" class="form-control" placeholder="Password">
           <label for="floatingPassword">Passwort</label>
         </div>
-        <button @click.prevent="onSubmit" class="w-100 btn btn-lg btn-primary mt-5" type="submit">
-          <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" class="me-3" />Anmelden
+        <button @click.prevent="onSubmit" class="w-100 btn btn-lg btn-primary mt-5" type="submit" :disabled="disableBtn">
+          <span v-if="submitted" class="spinner-border spinner-border-sm mr-3 spinner-margin" role="status" aria-hidden="true"></span>
+          Anmelden
         </button>
       </form>
     </main>
@@ -28,11 +29,19 @@
 
   const email = ref('')
   const password = ref('')
+  const submitted = ref(false)
+  const disableBtn = ref(false)
   const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
 
   async function onSubmit () {
+    submitted.value = true
+    disableBtn.value = true
     const authStore = useAuthStore()
-    await authStore.login(email.value, password.value)
+    const login = await authStore.login(email.value, password.value)
+    if (login?.data?.code === 401) {
+      submitted.value = false
+      disableBtn.value = false
+    }
   }
 </script>
 
@@ -70,6 +79,10 @@ body {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  .spinner-margin {
+    margin : 2px 5px;
   }
 }
 </style>

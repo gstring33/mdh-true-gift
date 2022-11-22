@@ -18,6 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
             toastStore.init()
             const message = error?.data?.message === 'Invalid credentials.' ? 'Dein Passwort oder deine E-Mail sind falsch': error.data.message
             toastStore.showDanger('Achtung...', message)
+            return error
         }
     }
 

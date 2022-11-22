@@ -6,7 +6,6 @@
     </div>
   </div>
   <div v-else>
-
     <Members :totalUsers="total" :users="users"/>
     <List />
   </div>
@@ -27,7 +26,6 @@ const ready = ref(false)
 onBeforeMount(async () => {
   try {
     const usersData = await fetcher.get(import.meta.env.VITE_API_BASE_URL + '/api/dashboard/users')
-    ready.value = true
 
     const usersArr  = []
     let userLine = [];
@@ -40,6 +38,8 @@ onBeforeMount(async () => {
     })
     total.value = usersData.total
     users.value = usersArr
+
+    ready.value = true
 
   } catch (error) {
     const { logout } = useAuthStore();
