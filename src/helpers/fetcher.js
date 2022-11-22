@@ -42,7 +42,7 @@ async function handleResponse(response) {
     const isJson = response.headers?.get('content-type')?.includes('application/json');
     const data = isJson ? await response.json() : null;
     if(!response.ok) {
-        return Promise.reject(data)
+        return Promise.reject({data, status: response.status})
     }
 
     return data;

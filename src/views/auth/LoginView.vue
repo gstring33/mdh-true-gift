@@ -4,7 +4,6 @@
       <img :src="logoUrl"  class="text-center" width="180">
     </div>
     <main class="form-signin">
-      <Toast :class="toastClass"></Toast>
       <form class="text-center">
         <h1 class="h3 mb-5 fw-normal mt-5">Bitte anmelden</h1>
         <div class="form-floating">
@@ -24,14 +23,12 @@
 </template>
 
 <script setup>
-  import Toast from '@/components/common/Toast.vue';
   import { ref } from 'vue';
   import { useAuthStore } from "@/stores/auth.store.js";
 
   const email = ref('')
   const password = ref('')
   const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
-  const toastClass = {'bg-warning' : true}
 
   async function onSubmit () {
     const authStore = useAuthStore()

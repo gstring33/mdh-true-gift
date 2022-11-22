@@ -4,21 +4,18 @@
       <img :src="logoUrl"  class="text-center" width="180">
     </div>
     <main class="form-reset-password">
+      <Toast></Toast>
       <form class="text-center">
         <h1 class="h3 mb-5 fw-normal mt-5">Bitte setzen Sie Ihr Passwort zurück</h1>
         <div class="form-floating">
-          <input type="oldPassword" class="form-control" placeholder="altes Passwort">
-          <label for="floatingInput">Altes Passwort</label>
-        </div>
-        <div class="form-floating">
-          <input type="newPassword" class="form-control" placeholder="neues Passwort">
+          <input v-model="newPassword" type="password" class="form-control newPassword" placeholder="neues Passwort">
           <label for="floatingInput">Neues Passwort</label>
         </div>
         <div class="form-floating">
-          <input type="confirmPassword" class="form-control" placeholder="neues Passwort">
+          <input v-model="newPassword2" type="password" class="form-control confirmPassword" placeholder="neues Passwort">
           <label for="floatingPassword">Neues Passwort bestätigen</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary mt-5" type="submit">
+        <button @click.prevent="onSubmit" class="w-100 btn btn-lg btn-primary mt-5" type="submit">
           <font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" class="me-3" />Passwort zurück setzen
         </button>
       </form>
@@ -27,7 +24,19 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useAccountStore } from "@/stores/account.store.js";
+import Toast from '@/components/common/Toast.vue';
+
 const logoUrl = new URL('../../assets/images/true-gift-logo.png', import.meta.url).href
+const newPassword = ref(null);
+const newPassword2 = ref(null);
+
+
+async function onSubmit () {
+  const accountStore = useAccountStore();
+  await accountStore.changePassword(newPassword.value, newPassword2.value)
+}
 
 </script>
 
@@ -55,21 +64,13 @@ body {
     z-index: 2;
   }
 
-  input[type="oldPassword"] {
+  .newPassword {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  input[type="newPassword"] {
-    margin-bottom: -1px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  input[type="confirmPassword"] {
+  .confirmPassword {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
