@@ -7,7 +7,7 @@
   </div>
   <div v-else>
     <Members :totalUsers="total" :users="users"/>
-    <List />
+    <List :gifts="gifts" />
   </div>
 </template>
 
@@ -21,11 +21,13 @@ import { useAuthStore } from "@/stores/auth.store.js";
 
 const total = ref(null)
 const users = ref(null)
+const gifts = ref(null)
 const ready = ref(false)
 
 onBeforeMount(async () => {
   try {
     const usersData = await fetcher.get(import.meta.env.VITE_API_BASE_URL + '/api/dashboard/users')
+    const listData = await fetcher.get(import.meta.env.VITE_API_BASE_URL + '/api/gift/list')
 
     const usersArr  = []
     let userLine = [];
@@ -38,7 +40,7 @@ onBeforeMount(async () => {
     })
     total.value = usersData.total
     users.value = usersArr
-
+    gifts.value = listData
     ready.value = true
 
   } catch (error) {

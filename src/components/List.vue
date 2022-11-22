@@ -3,18 +3,14 @@
     <div class="card mb-3">
       <div class="card-header lead py-3">Meine Liste</div>
       <div class="card-body">
-        <div v-if="!areThereAnyWishes" class="alert alert-warning" role="alert">
+        <!--<div class="alert alert-warning" role="alert">
           Du hast noch keine Wünsche hinzugefügt
-        </div>
+        </div>-->
         <ol class="list-group mb-4">
-          <li v-for="wish in wishes" class="list-group-item" :key="wish.id">
+          <li v-for="gift in gifts" class="list-group-item" :key="gift.uuid">
             <div class="col col-12 mt-3">
-              <div class="fw-bold">{{ wish.title }}</div>
-              Lorem ipsum dolor sit amet, sed diam yonumy eirmod tempor invidunt
-              ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-              vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-              kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-              amet.
+              <div class="fw-bold">{{ gift.title }}</div>
+              {{ gift.description }}
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end my-3">
               <div
@@ -23,7 +19,7 @@
                 aria-label="Basic mixed styles example"
               >
                 <button
-                  @click="openOffCanvas(wish, 'UPDATE')"
+                  @click="openOffCanvas(gift, 'UPDATE')"
                   type="button"
                   class="btn btn-outline-secondary btn-sm"
                   data-bs-toggle="offcanvas"
@@ -165,39 +161,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import WishCreateForm from "./form/WishCreateForm.vue";
 import WishUpdateForm from "./form/WishUpdateForm.vue";
+
+// ----------- Props
+defineProps({
+  gifts: Object
+})
 
 // ----------- References
 const currentWish = ref(null);
 const wishFormType = ref(null);
 
-const wishes = ref([
-  {
-    id: 1,
-    title: "Lorem ipsum...1",
-    description: "Lorem ispum 1",
-    link: "link 1",
-  },
-  {
-    id: 1,
-    title: "Lorem ipsum...2",
-    description: "Lorem ispum 2",
-    link: "link 2",
-  },
-  {
-    id: 1,
-    title: "Lorem ipsum..3",
-    description: "Lorem ispum 3",
-    link: "link 3",
-  },
-]);
-
-// ----------- Computed
-const areThereAnyWishes = computed(() => {
-  return wishes.value.length > 0;
-});
 
 // ----------- Methods
 const openModalDelete = (wish) => {
