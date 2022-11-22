@@ -23,12 +23,16 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const user = authStore.user()
 
-  if (to.meta.requiresAuth && !user) {
+  if ((to.meta.requiresAuth && !user)) {
     router.push('/account/login');
   }
 
-  if (to.meta.requiresAuth && !user.isActive) {
+  if (to.meta.requiresAuth && !user?.isActive) {
     router.push('/account/reset-password');
+  }
+
+  if (to.name === 'resetPassword' && !user) {
+    router.push('/account/login')
   }
 
   next();
