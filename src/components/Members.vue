@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="tg-alert tg-alert-warning" role="alert">
+    <div v-if="user.isPartnerListPublished" class="tg-alert tg-alert-warning" role="alert">
       <b><font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-1"/> Noch ein wenig Geduld...</b> Ella hat ihre Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um Ellas Liste zu sehen.
     </div>
     <div class="card mb-3">
@@ -13,10 +13,10 @@
             </div>
           </div>
         </div>
-        <button v-if="isPartnerNotSelected" type="button" class="btn btn-success">
+        <button v-if="!user.isPartnerSelected" type="button" class="btn btn-success">
           Einen Partner auswählen
         </button>
-        <button v-if="!isPartnerNotSelected && isPartnersListPublished" type="button" class="btn btn-success disabled">Liste von <b>Ella</b> ansehen</button>
+        <button v-if="user.isPartnerSelected && user.isPartnerListPublished" type="button" class="btn btn-success disabled">Liste von <b>Ella</b> ansehen</button>
       </div>
     </div>
   </div>
@@ -31,6 +31,7 @@ import { useAuthStore } from "@/stores/auth.store.js";
 
 const total = ref(null)
 const users = ref(null)
+const { user } = useAuthStore();
 
 onBeforeMount(async () => {
   try {
@@ -52,9 +53,5 @@ onBeforeMount(async () => {
       logout()
   }
 })
-
-// ---------- Refs
-const isPartnerNotSelected = ref(false)
-const isPartnersListPublished = ref(false)
 
 </script>
