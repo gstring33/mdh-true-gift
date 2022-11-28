@@ -7,7 +7,7 @@
   </div>
   <div v-else>
     <Members :totalUsers="total" :users="users"/>
-    <List :gifts="gifts" />
+    <List :giftList="gifts" />
   </div>
 </template>
 

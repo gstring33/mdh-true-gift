@@ -135,6 +135,7 @@
       </div>
     </Teleport>
     <Teleport to="#offCanvas">
+      <!-- Update -->
       <div
         class="offcanvas offcanvas-start"
         tabindex="-1"
@@ -154,9 +155,13 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <WishUpdateForm v-if="currentWish" :wish="currentWish" />
+          <div v-if="successfullyUpdated" class="alert alert-success" role="alert">
+            Dein Wunsch wurde korrekt gespeichert
+          </div>
+          <WishUpdateForm v-if="currentWish" :wish="currentWish" @update-gift="updateGift"/>
         </div>
       </div>
+      <!-- Create -->
       <div
         class="offcanvas offcanvas-start"
         tabindex="-1"
@@ -183,28 +188,31 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, toRaw} from "vue";
 import WishCreateForm from "./form/WishCreateForm.vue";
 import WishUpdateForm from "./form/WishUpdateForm.vue";
+import { fetcher } from "@/helpers/fetcher.js";
 
 // ----------- Props
-defineProps({
-  gifts: Object
+const props = defineProps({
+  giftList: Object
 })
 
 // ----------- Life Cycle
 onMounted(function () {
   const canvas = document.querySelectorAll('.offcanvas')
-  console.log(canvas);
   canvas.forEach((el) => {
     el.addEventListener('hidden.bs.offcanvas', function () {
       currentWish.value = null;
+      successfullyUpdated.value = false
     })
   })
 })
 
-// ----------- References
+// ----------- Ref
 const currentWish = ref(null);
+const gifts = ref(props.giftList)
+const successfullyUpdated = ref(false)
 
 // ----------- Methods
 const openModalDelete = (wish) => {
@@ -216,4 +224,21 @@ const openOffCanvas = (wish) => {
     currentWish.value = wish;
   }
 };
+
+const updateGift = async function (gift) {
+  const newGift = {
+    title: gift.title.value,
+    description: gift.description.value,
+    link : gift.link.value,
+    uuid : gift.uuid
+  };
+  await fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid, newGift)
+  successfullyUpdated.value = true;
+  let currentListToRaw = toRaw(gifts.value);
+  const newList = currentListToRaw.map(function(el) {
+    return el.uuid === newGift.uuid ? newGift : el;
+  })
+  gifts.value = newList;
+}
+
 </script>

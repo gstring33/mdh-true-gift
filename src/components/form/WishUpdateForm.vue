@@ -3,7 +3,7 @@
     <div class="mb-3">
       <label for="wishInputTitle" class="form-label">Titel</label>
       <input
-        v-model="wish.title"
+        v-model="gift.title.value"
         type="text"
         class="form-control"
         id="wishInputTitle"
@@ -15,7 +15,7 @@
         >Beschreibung</label
       >
       <textarea
-        v-model="wish.description"
+        v-model="gift.description.value"
         class="form-control"
         id="wishTextareaDescription"
         rows="3"
@@ -24,7 +24,7 @@
     <div class="mb-3">
       <label for="wishInputLink" class="form-label">Link</label>
       <input
-        v-model="wish.link"
+        v-model="gift.link.value"
         type="text"
         placeholder="ex: https://amazon.de"
         class="form-control"
@@ -32,7 +32,10 @@
         aria-describedby="wishLinkHelp"
       />
     </div>
-    <button type="submit" class="btn btn-success"><font-awesome-icon :icon="['fas', 'floppy-disk']" class="me-2" />Speichern</button>
+    <button @click.prevent="$emit('updateGift', gift)" type="submit" class="btn btn-success">
+      <font-awesome-icon v-if="!submitted" :icon="['fas', 'floppy-disk']" class="me-2" />
+      Speichern
+    </button>
   </form>
 </template>
 
@@ -45,5 +48,11 @@ const props = defineProps({
 });
 
 // ---------- Refs
-const wish = ref(props.wish);
+const gift = {
+  title: ref(props.wish.title),
+  description: ref(props.wish.description),
+  link: ref(props.wish.link),
+  uuid: props.wish.uuid
+}
+
 </script>
