@@ -2,6 +2,7 @@
   <div class="container mt-5">
     <div class="card mb-3">
       <div class="card-header lead py-3">Meine Liste</div>
+      <!-- Modal Update gift -->
       <div class="card-body">
         <!--<div class="alert alert-warning" role="alert">
           Du hast noch keine Wünsche hinzugefügt
@@ -10,7 +11,11 @@
           <li v-for="gift in gifts" class="list-group-item" :key="gift.uuid">
             <div class="col col-12 mt-3">
               <div class="fw-bold">{{ gift.title }}</div>
-              {{ gift.description }}
+              <p class="mt-3">{{ gift.description }}</p>
+              <a v-if="gift.link" :href="gift.link" target=_blank class="btn btn-sm btn-primary">
+                <font-awesome-icon :icon="['fas', 'eye']" class="me-2" />
+                Meinen Wunsch sehen
+              </a>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end my-3">
               <div
@@ -19,17 +24,16 @@
                 aria-label="Basic mixed styles example"
               >
                 <button
-                  @click="openOffCanvas(gift, 'UPDATE')"
+                  @click="openOffCanvas(gift)"
                   type="button"
                   class="btn btn-outline-secondary btn-sm"
                   data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasWishForm"
-                  aria-controls="offcanvasBottom"
+                  data-bs-target="#offcanvasWishFormUpdate"
                 >
                   <font-awesome-icon :icon="['fas', 'marker']" class="me-1" />
                 </button>
                 <button
-                  @click="openModalDelete(wish)"
+                  @click="openModalDelete(gift)"
                   type="button"
                   class="btn btn-outline-danger btn-sm"
                   data-bs-toggle="modal"
@@ -43,11 +47,10 @@
           </li>
         </ol>
         <button
-          @click="openOffCanvas(null, 'CREATE')"
           type="button"
           class="btn btn-success"
           data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasWishForm"
+          data-bs-target="#offcanvasWishFormCreate"
           aria-controls="offcanvasBottom"
         >
           <font-awesome-icon :icon="['fas', 'cart-plus']" class="me-2" /> Einen Wunsch hinzufügen
@@ -63,6 +66,7 @@
       </div>
     </div>
     <Teleport to="#modals">
+      <!-- Modal delete --->
       <div
         class="modal fade"
         id="deleteModal"
@@ -89,6 +93,7 @@
           </div>
         </div>
       </div>
+      <!-- Modal publish list -->
       <div
           class="modal fade"
           id="confirmModal"
@@ -133,13 +138,13 @@
       <div
         class="offcanvas offcanvas-start"
         tabindex="-1"
-        id="offcanvasWishForm"
-        aria-labelledby="offcanvasWishFormLabel"
+        id="offcanvasWishFormUpdate"
+        aria-labelledby="offcanvasWishFormUpdateLabel"
+        data-bs-backdrop="true"
       >
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasWishFormLabel">
-            <span v-if="wishFormType === 'UPDATE'"> <font-awesome-icon :icon="['fas', 'marker']" class="me-2" />Wunsch bearbeiten</span>
-            <span v-else> <font-awesome-icon :icon="['fas', 'cart-plus']" class="me-2" />Wunsch erstellen</span>
+          <h5 class="offcanvas-title" id="offcanvasWishFormUpdateLabel">
+            <span><font-awesome-icon :icon="['fas', 'marker']" class="me-2" />Wunsch bearbeiten</span>
           </h5>
           <button
             type="button"
@@ -149,11 +154,28 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <WishUpdateForm
-            v-if="wishFormType === 'UPDATE'"
-            :wish="currentWish"
-          />
-          <WishCreateForm v-else />
+          <WishUpdateForm v-if="currentWish" :wish="currentWish" />
+        </div>
+      </div>
+      <div
+        class="offcanvas offcanvas-start"
+        tabindex="-1"
+        id="offcanvasWishFormCreate"
+        aria-labelledby="offcanvasWishFormCreateLabel"
+      >
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasWishFormCreateLabel">
+            <span><font-awesome-icon :icon="['fas', 'cart-plus']" class="me-2" />Wunsch erstellen</span>
+          </h5>
+          <button
+            type="button"
+            class="btn-close text-reset"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="offcanvas-body">
+          <WishCreateForm/>
         </div>
       </div>
     </Teleport>
@@ -161,7 +183,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import {onMounted, ref} from "vue";
 import WishCreateForm from "./form/WishCreateForm.vue";
 import WishUpdateForm from "./form/WishUpdateForm.vue";
 
@@ -170,20 +192,28 @@ defineProps({
   gifts: Object
 })
 
+// ----------- Life Cycle
+onMounted(function () {
+  const canvas = document.querySelectorAll('.offcanvas')
+  console.log(canvas);
+  canvas.forEach((el) => {
+    el.addEventListener('hidden.bs.offcanvas', function () {
+      currentWish.value = null;
+    })
+  })
+})
+
 // ----------- References
 const currentWish = ref(null);
-const wishFormType = ref(null);
-
 
 // ----------- Methods
 const openModalDelete = (wish) => {
   currentWish.value = wish;
 };
 
-const openOffCanvas = (wish, formType) => {
+const openOffCanvas = (wish) => {
   if (wish) {
     currentWish.value = wish;
   }
-  wishFormType.value = formType;
 };
 </script>
