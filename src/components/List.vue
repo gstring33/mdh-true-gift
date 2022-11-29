@@ -4,10 +4,10 @@
       <div class="card-header lead py-3">Meine Liste</div>
       <!-- Modal Update gift -->
       <div class="card-body">
-        <!--<div class="alert alert-warning" role="alert">
-          Du hast noch keine Wünsche hinzugefügt
-        </div>-->
-        <ol class="list-group mb-4">
+        <div v-if="gifts.length === 0" class="lead mb-3"  role="alert">
+          <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" /> Du hast noch keine Wünsche hinzugefügt...
+        </div>
+        <ol v-else class="list-group mb-4">
           <li v-for="gift in gifts" class="list-group-item" :key="gift.uuid">
             <div class="col col-12 mt-3">
               <div class="fw-bold">{{ gift.title }}</div>
@@ -78,17 +78,24 @@
           <div class="modal-content">
             <div class="modal-body">
               Möchtest du den folgenden Wunsch wirklich löschen: <br />
-              <i>'{{ currentWish?.title }}'</i>
+              <b>{{ currentWish?.title }}</b>
             </div>
-            <div class="modal-footer">
+            <div v-if="successfullyDeleted" class="alert alert-success alert-dismissible fade show m-3" role="alert">
+              Dein Wunsch wurde korrekt gespeichert
+            </div>
+            <div v-if="!successfullyUpdated" class="modal-footer">
               <button
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                <font-awesome-icon :icon="['fas', 'xmark']" class="me-2" /> Nein
+                <font-awesome-icon :icon="['fas', 'xmark']" class="me-2" />Nein
               </button>
-              <button type="button" class="btn btn-success"><font-awesome-icon :icon="['fas', 'check']" class="me-2" />Ja</button>
+              <button @click="deleteGift" type="button" class="btn btn-success">
+                <span v-if="requestStore.load" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <font-awesome-icon v-else :icon="['fas', 'check']" class="me-2" />
+                Ja
+              </button>
             </div>
           </div>
         </div>
@@ -205,7 +212,15 @@ onMounted(function () {
   canvas.forEach((el) => {
     el.addEventListener('hidden.bs.offcanvas', function () {
       currentWish.value = null;
-      successfullyUpdated.value = false
+      successfullyUpdated.value = false;
+    })
+  })
+
+  const modals = document.querySelectorAll('.modal')
+  modals.forEach((el) => {
+    el.addEventListener('hidden.bs.modal', function () {
+      currentWish.value = null;
+      successfullyDeleted.value = false;
     })
   })
 })
@@ -214,6 +229,7 @@ onMounted(function () {
 const currentWish = ref(null);
 const gifts = ref(props.giftList)
 const successfullyUpdated = ref(false)
+const successfullyDeleted = ref(false)
 
 // ----------- Stores
 const requestStore = useRequestStore()
@@ -244,6 +260,13 @@ const updateGift = async function (gift) {
     return el.uuid === newGift.uuid ? newGift : el;
   })
   gifts.value = newList;
+  requestStore.load = null;
+}
+
+const deleteGift = async function () {
+  requestStore.load = true;
+  await fetcher.delete(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid);
+  successfullyDeleted.value = true;
   requestStore.load = null;
 }
 
