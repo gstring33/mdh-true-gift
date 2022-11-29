@@ -187,7 +187,10 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <WishCreateForm/>
+          <div v-if="successfullyCreated" class="alert alert-success alert-dismissible fade show" role="alert">
+            Dein Wunsch wurde korrekt gespeichert
+          </div>
+          <WishCreateForm @create-gift="createGift"/>
         </div>
       </div>
     </Teleport>
@@ -213,6 +216,8 @@ onMounted(function () {
     el.addEventListener('hidden.bs.offcanvas', function () {
       currentWish.value = null;
       successfullyUpdated.value = false;
+      successfullyCreated.value = false;
+      requestStore.load = null;
     })
   })
 
@@ -221,6 +226,8 @@ onMounted(function () {
     el.addEventListener('hidden.bs.modal', function () {
       currentWish.value = null;
       successfullyDeleted.value = false;
+      successfullyCreated.value = false;
+      requestStore.load = null;
     })
   })
 })
@@ -230,6 +237,7 @@ const currentWish = ref(null);
 const gifts = ref(props.giftList)
 const successfullyUpdated = ref(false)
 const successfullyDeleted = ref(false)
+const successfullyCreated = ref(false)
 
 // ----------- Stores
 const requestStore = useRequestStore()
@@ -270,4 +278,17 @@ const deleteGift = async function () {
   requestStore.load = null;
 }
 
+const createGift = async function (gift) {
+  requestStore.load = true;
+  const newGift = {
+    title: gift.title.value,
+    description: gift.description.value,
+    link: gift.link.value
+  };
+  const createdGift = await fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', newGift);
+  gifts.value.push(createdGift)
+  requestStore.load = false;
+  successfullyCreated.value = true;
+
+}
 </script>

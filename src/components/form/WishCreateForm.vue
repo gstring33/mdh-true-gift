@@ -3,7 +3,7 @@
     <div class="mb-3">
       <label for="wishInputTitle" class="form-label">Titel</label>
       <input
-        v-model="title"
+        v-model="gift.title.value"
         type="text"
         class="form-control"
         id="wishInputTitle"
@@ -15,7 +15,7 @@
         >Beschreibung</label
       >
       <textarea
-        v-model="description"
+        v-model="gift.description.value"
         class="form-control"
         id="wishTextareaDescription"
         rows="3"
@@ -24,7 +24,7 @@
     <div class="mb-3">
       <label for="wishInputLink" class="form-label">Link</label>
       <input
-        v-model="link"
+        v-model="gift.link.value"
         type="text"
         placeholder="ex: https://amazon.de"
         class="form-control"
@@ -32,15 +32,26 @@
         aria-describedby="wishLinkHelp"
       />
     </div>
-    <button type="submit" class="btn btn-success"><font-awesome-icon :icon="['fas', 'floppy-disk']" class="me-2" /> Speichern</button>
+    <button @click.prevent="$emit('createGift', gift)" type="submit" class="btn btn-success">
+      <span v-if="requestStore.load" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <font-awesome-icon v-else :icon="['fas', 'floppy-disk']" class="me-2" />
+      Speichern
+    </button>
   </form>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRequestStore} from "@/stores/request.store";
+
+// ---------- Stores
+const requestStore = useRequestStore();
 
 // ---------- Refs
-const title = ref(null);
-const description = ref(null);
-const link = ref(null);
+const gift = {
+  title : ref(null),
+  description : ref(null),
+  link : ref(null),
+}
+
 </script>
