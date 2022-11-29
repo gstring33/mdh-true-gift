@@ -274,6 +274,9 @@ const updateGift = async function (gift) {
 const deleteGift = async function () {
   requestStore.load = true;
   await fetcher.delete(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid);
+  for( let i=0; i < gifts.value.length; i++) {
+    gifts.value.splice(i,i)
+  }
   successfullyDeleted.value = true;
   requestStore.load = null;
 }
