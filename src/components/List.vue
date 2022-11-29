@@ -278,9 +278,8 @@ const updateGift = async function (gift) {
 const deleteGift = async function () {
   requestStore.load = true;
   await fetcher.delete(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid);
-  for( let i=0; i < gifts.value.length; i++) {
-    gifts.value.splice(i,i)
-  }
+  let currentListToRaw = toRaw(gifts.value);
+  gifts.value = currentListToRaw.filter(el => el.uuid !== currentWish.value.uuid)
   successfullyDeleted.value = true;
   requestStore.load = null;
 }
@@ -292,6 +291,7 @@ const createGift = async function (gift) {
     description: gift.description.value,
     link: gift.link.value
   };
+
   fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', newGift)
       .then((response) => {
         gifts.value.push(response)
