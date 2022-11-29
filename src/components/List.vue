@@ -190,6 +190,9 @@
           <div v-if="successfullyCreated" class="alert alert-success alert-dismissible fade show" role="alert">
             Dein Wunsch wurde korrekt gespeichert
           </div>
+          <div v-if="error" class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ error.error}}
+          </div>
           <WishCreateForm @create-gift="createGift"/>
         </div>
       </div>
@@ -238,6 +241,7 @@ const gifts = ref(props.giftList)
 const successfullyUpdated = ref(false)
 const successfullyDeleted = ref(false)
 const successfullyCreated = ref(false)
+const error = ref(null)
 
 // ----------- Stores
 const requestStore = useRequestStore()
@@ -288,10 +292,18 @@ const createGift = async function (gift) {
     description: gift.description.value,
     link: gift.link.value
   };
-  const createdGift = await fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', newGift);
-  gifts.value.push(createdGift)
-  requestStore.load = false;
-  successfullyCreated.value = true;
+  fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', newGift)
+      .then((response) => {
+        gifts.value.push(response)
+        requestStore.load = false;
+        error.value = false
+        successfullyCreated.value = true;
+      })
+      .catch((e) => {
+        requestStore.load = false;
+        error.value = e.data
+      });
+
 
 }
 </script>
