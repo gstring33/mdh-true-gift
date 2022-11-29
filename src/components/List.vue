@@ -155,7 +155,7 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <div v-if="successfullyUpdated" class="alert alert-success" role="alert">
+          <div v-if="successfullyUpdated" class="alert alert-success alert-dismissible fade show" role="alert">
             Dein Wunsch wurde korrekt gespeichert
           </div>
           <WishUpdateForm v-if="currentWish" :wish="currentWish" @update-gift="updateGift"/>
@@ -192,6 +192,7 @@ import {onMounted, ref, toRaw} from "vue";
 import WishCreateForm from "./form/WishCreateForm.vue";
 import WishUpdateForm from "./form/WishUpdateForm.vue";
 import { fetcher } from "@/helpers/fetcher.js";
+import { useRequestStore} from "@/stores/request.store";
 
 // ----------- Props
 const props = defineProps({
@@ -214,6 +215,9 @@ const currentWish = ref(null);
 const gifts = ref(props.giftList)
 const successfullyUpdated = ref(false)
 
+// ----------- Stores
+const requestStore = useRequestStore()
+
 // ----------- Methods
 const openModalDelete = (wish) => {
   currentWish.value = wish;
@@ -226,6 +230,7 @@ const openOffCanvas = (wish) => {
 };
 
 const updateGift = async function (gift) {
+  requestStore.load = true;
   const newGift = {
     title: gift.title.value,
     description: gift.description.value,
@@ -239,6 +244,7 @@ const updateGift = async function (gift) {
     return el.uuid === newGift.uuid ? newGift : el;
   })
   gifts.value = newList;
+  requestStore.load = null;
 }
 
 </script>
