@@ -32,7 +32,7 @@
         aria-describedby="wishLinkHelp"
       />
     </div>
-    <button @click.prevent="$emit('createGift', gift)" type="submit" class="btn btn-success">
+    <button @click.prevent="$emit('createGift', gift)" type="submit" class="btn btn-success" :disabled="giftStore.status.create.isLoading">
       <span v-if="giftStore.status.create.isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
       <font-awesome-icon v-else :icon="['fas', 'floppy-disk']" class="me-2" />
       Speichern

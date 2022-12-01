@@ -32,8 +32,8 @@
         aria-describedby="wishLinkHelp"
       />
     </div>
-    <button @click.prevent="$emit('updateGift', gift)" type="submit" class="btn btn-success">
-      <span v-if="giftStore.status.create.isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+    <button @click.prevent="$emit('updateGift', gift)" type="submit" class="btn btn-success" :disabled="giftStore.status.update.isLoading">
+      <span v-if="giftStore.status.update.isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
       <font-awesome-icon v-else :icon="['fas', 'floppy-disk']" class="me-2" />
       <span>Speichern</span>
     </button>

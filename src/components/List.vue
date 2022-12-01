@@ -87,10 +87,11 @@
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
+                :disabled="giftStore.status.delete.isLoading"
               >
                 <font-awesome-icon :icon="['fas', 'xmark']" class="me-2" />Nein
               </button>
-              <button @click="deleteGift" type="button" class="btn btn-success">
+              <button @click="deleteGift" type="button" class="btn btn-success" :disabled="giftStore.status.delete.isLoading">
                 <span v-if="giftStore.status.delete.isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 <font-awesome-icon v-else :icon="['fas', 'check']" class="me-2" />
                 Ja
@@ -193,7 +194,7 @@
             Dein Wunsch wurde korrekt gespeichert
           </div>
           <div v-if="error" class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ error.error}}
+            {{ error }}
           </div>
           <WishCreateForm @create-gift="createGift"/>
         </div>
@@ -281,7 +282,7 @@ const updateGift = async function (gift) {
       })
       .catch((e) => {
         console.log(e)
-        giftStore.status.create.isLoading = false
+        giftStore.status.update.isLoading = false
         error.value = ([400,404].includes(e.status)) ? e.data.error : "Aus internen Gründen wurde Ihr Wunsch nicht aufgenommen";
       })
 }
@@ -314,7 +315,8 @@ const createGift = async function (gift) {
       })
       .catch((e) => {
         giftStore.status.create.isLoading = false
-        error.value = ([400, 404].includes(e.status)) ? e.status : "Aus internen Gründen wurde Ihr Wunsch nicht aufgenommen";
+        console.log(e)
+        error.value = ([400,404].includes(e.status)) ? e.data.error : "Aus internen Gründen wurde Ihr Wunsch nicht aufgenommen";
       });
 
 
