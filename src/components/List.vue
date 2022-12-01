@@ -2,7 +2,6 @@
   <div class="container mt-5">
     <div class="card mb-3">
       <div class="card-header lead py-3">Meine Liste</div>
-      <!-- Modal Update gift -->
       <div class="card-body">
         <div v-if="gifts.length === 0" class="lead mb-3"  role="alert">
           <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" /> Du hast noch keine Wünsche hinzugefügt...
@@ -80,10 +79,10 @@
               Möchtest du den folgenden Wunsch wirklich löschen: <br />
               <b>{{ currentWish?.title }}</b>
             </div>
-            <div v-if="successfullyDeleted" class="alert alert-success alert-dismissible fade show m-3" role="alert">
+            <div v-if="giftStore.status.delete.isCompleted" class="alert alert-success alert-dismissible fade show m-3" role="alert">
               Dein Wunsch wurde korrekt gespeichert
             </div>
-            <div v-if="!successfullyUpdated" class="modal-footer">
+            <div v-if="!giftStore.status.delete.isCompleted" class="modal-footer">
               <button
                 type="button"
                 class="btn btn-secondary"
@@ -92,7 +91,7 @@
                 <font-awesome-icon :icon="['fas', 'xmark']" class="me-2" />Nein
               </button>
               <button @click="deleteGift" type="button" class="btn btn-success">
-                <span v-if="requestStore.load" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span v-if="giftStore.status.delete.isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 <font-awesome-icon v-else :icon="['fas', 'check']" class="me-2" />
                 Ja
               </button>
@@ -162,8 +161,11 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <div v-if="successfullyUpdated" class="alert alert-success alert-dismissible fade show" role="alert">
+          <div v-if="giftStore.status.update.isCompleted" class="alert alert-success alert-dismissible fade show" role="alert">
             Dein Wunsch wurde korrekt gespeichert
+          </div>
+          <div v-if="error" class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ error }}
           </div>
           <WishUpdateForm v-if="currentWish" :wish="currentWish" @update-gift="updateGift"/>
         </div>
@@ -187,7 +189,7 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <div v-if="successfullyCreated" class="alert alert-success alert-dismissible fade show" role="alert">
+          <div v-if="giftStore.status.create.isCompleted" class="alert alert-success alert-dismissible fade show" role="alert">
             Dein Wunsch wurde korrekt gespeichert
           </div>
           <div v-if="error" class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -205,7 +207,7 @@ import {onMounted, ref, toRaw} from "vue";
 import WishCreateForm from "./form/WishCreateForm.vue";
 import WishUpdateForm from "./form/WishUpdateForm.vue";
 import { fetcher } from "@/helpers/fetcher.js";
-import { useRequestStore} from "@/stores/request.store";
+import { useGiftStore } from "@/stores/gift.store";
 
 // ----------- Props
 const props = defineProps({
@@ -218,9 +220,11 @@ onMounted(function () {
   canvas.forEach((el) => {
     el.addEventListener('hidden.bs.offcanvas', function () {
       currentWish.value = null;
-      successfullyUpdated.value = false;
-      successfullyCreated.value = false;
-      requestStore.load = null;
+      error.value = null;
+      giftStore.status.create.isCompleted = false;
+      giftStore.status.create.isLoading = false;
+      giftStore.status.update.isCompleted = false;
+      giftStore.status.update.isLoading = false;
     })
   })
 
@@ -228,9 +232,8 @@ onMounted(function () {
   modals.forEach((el) => {
     el.addEventListener('hidden.bs.modal', function () {
       currentWish.value = null;
-      successfullyDeleted.value = false;
-      successfullyCreated.value = false;
-      requestStore.load = null;
+      giftStore.status.delete.isCompleted = false;
+      giftStore.status.delete.isLoading = false;
     })
   })
 })
@@ -238,13 +241,11 @@ onMounted(function () {
 // ----------- Ref
 const currentWish = ref(null);
 const gifts = ref(props.giftList)
-const successfullyUpdated = ref(false)
-const successfullyDeleted = ref(false)
-const successfullyCreated = ref(false)
 const error = ref(null)
 
 // ----------- Stores
-const requestStore = useRequestStore()
+const giftStore = useGiftStore()
+
 
 // ----------- Methods
 const openModalDelete = (wish) => {
@@ -258,34 +259,46 @@ const openOffCanvas = (wish) => {
 };
 
 const updateGift = async function (gift) {
-  requestStore.load = true;
+  giftStore.status.update.isCompleted = false
+  giftStore.status.update.isLoading = true
   const newGift = {
     title: gift.title.value,
     description: gift.description.value,
-    link : gift.link.value,
+    link : gift.link.value === undefined ? null : gift.link.value,
     uuid : gift.uuid
   };
-  await fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid, newGift)
-  successfullyUpdated.value = true;
-  let currentListToRaw = toRaw(gifts.value);
-  const newList = currentListToRaw.map(function(el) {
-    return el.uuid === newGift.uuid ? newGift : el;
-  })
-  gifts.value = newList;
-  requestStore.load = null;
+
+  fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid, newGift)
+      .then(() => {
+        let currentListToRaw = toRaw(gifts.value);
+        const newList = currentListToRaw.map(function(el) {
+          return el.uuid === newGift.uuid ? newGift : el;
+        })
+        gifts.value = newList;
+        giftStore.status.update.isLoading = false
+        giftStore.status.update.isCompleted = true
+        error.value = false
+      })
+      .catch((e) => {
+        console.log(e)
+        giftStore.status.create.isLoading = false
+        error.value = ([400,404].includes(e.status)) ? e.data.error : "Aus internen Gründen wurde Ihr Wunsch nicht aufgenommen";
+      })
 }
 
 const deleteGift = async function () {
-  requestStore.load = true;
+  giftStore.status.delete.isCompleted = false
+  giftStore.status.delete.isLoading = true
   await fetcher.delete(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid);
+  giftStore.status.delete.isCompleted = true
+  giftStore.status.delete.isLoading = false
   let currentListToRaw = toRaw(gifts.value);
   gifts.value = currentListToRaw.filter(el => el.uuid !== currentWish.value.uuid)
-  successfullyDeleted.value = true;
-  requestStore.load = null;
 }
 
 const createGift = async function (gift) {
-  requestStore.load = true;
+  giftStore.status.create.isCompleted = false
+  giftStore.status.create.isLoading = true
   const newGift = {
     title: gift.title.value,
     description: gift.description.value,
@@ -295,13 +308,13 @@ const createGift = async function (gift) {
   fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', newGift)
       .then((response) => {
         gifts.value.push(response)
-        requestStore.load = false;
+        giftStore.status.create.isLoading = false
+        giftStore.status.create.isCompleted = true
         error.value = false
-        successfullyCreated.value = true;
       })
       .catch((e) => {
-        requestStore.load = false;
-        error.value = e.data
+        giftStore.status.create.isLoading = false
+        error.value = ([400, 404].includes(e.status)) ? e.status : "Aus internen Gründen wurde Ihr Wunsch nicht aufgenommen";
       });
 
 

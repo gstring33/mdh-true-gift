@@ -33,7 +33,7 @@
       />
     </div>
     <button @click.prevent="$emit('updateGift', gift)" type="submit" class="btn btn-success">
-      <span v-if="requestStore.load" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <span v-if="giftStore.status.create.isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
       <font-awesome-icon v-else :icon="['fas', 'floppy-disk']" class="me-2" />
       <span>Speichern</span>
     </button>
@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref, defineProps } from "vue";
-import { useRequestStore} from "@/stores/request.store";
+import { useGiftStore} from "@/stores/gift.store";
 
 // ---------- Props
 const props = defineProps({
@@ -58,6 +58,6 @@ const gift = {
 }
 
 // ---------- Stores
-const requestStore = useRequestStore()
+const giftStore = useGiftStore();
 
 </script>
