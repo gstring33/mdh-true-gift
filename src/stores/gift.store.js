@@ -1,7 +1,7 @@
 import { defineStore} from "pinia";
 import { ref } from 'vue';
 
-export const useGiftStore = defineStore('request', () => {
+export const useGiftStore = defineStore('gift', () => {
     const status =  {
         update : {
             isLoading : ref(false),
