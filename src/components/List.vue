@@ -16,7 +16,7 @@
                 Meinen Wunsch sehen
               </a>
             </div>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end my-3">
+            <div v-if="!isPublished" class="d-grid gap-2 d-md-flex justify-content-md-end my-3">
               <div
                 class="btn-group"
                 role="group"
@@ -45,7 +45,7 @@
             </div>
           </li>
         </ol>
-        <button
+        <button v-if="!isPublished"
           type="button"
           class="btn btn-success"
           data-bs-toggle="offcanvas"
@@ -59,6 +59,7 @@
             class="btn btn-outline-success mx-3"
             data-bs-toggle="modal"
             data-bs-target="#confirmModal"
+            v-if="list.length !== 0 && !isPublished"
         >
           <font-awesome-icon :icon="['fas', 'paper-plane']" class="me-2" /> Liste veröffentlichen
         </button>
@@ -132,6 +133,7 @@
                 <font-awesome-icon :icon="['fas', 'xmark']" class="me-2"/>Nein
               </button>
               <button
+                  @click="publishList()"
                   type="button"
                   class="btn btn-success">
                 <font-awesome-icon :icon="['fas', 'check']" class="me-2" />Veröffentlichen
@@ -335,5 +337,9 @@ const createGift = async function (gift) {
       });
 
 
+}
+
+const publishList = async function () {
+  isPublished.value = true
 }
 </script>
