@@ -17,7 +17,15 @@ export const useGiftStore = defineStore('request', () => {
         }
     }
 
+    const gift = {
+        title: ref(null),
+        description: ref(null),
+        link: ref(null),
+        uuid: ref(null)
+    }
+
     return {
         status,
+        gift
     }
 })

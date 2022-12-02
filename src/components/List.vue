@@ -3,11 +3,11 @@
     <div class="card mb-3">
       <div class="card-header lead py-3">Meine Liste</div>
       <div class="card-body">
-        <div v-if="gifts.length === 0" class="lead mb-3"  role="alert">
+        <div v-if="list.length === 0" class="lead mb-3"  role="alert">
           <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" /> Du hast noch keine Wünsche hinzugefügt...
         </div>
         <ol v-else class="list-group mb-4">
-          <li v-for="gift in gifts" class="list-group-item" :key="gift.uuid">
+          <li v-for="gift in list" class="list-group-item" :key="gift.uuid">
             <div class="col col-12 mt-3">
               <div class="fw-bold">{{ gift.title }}</div>
               <p class="mt-3">{{ gift.description }}</p>
@@ -162,13 +162,13 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <div v-if="giftStore.status.update.isCompleted" class="alert alert-success alert-dismissible fade show" role="alert">
+          <div v-if="status.update.isCompleted" class="alert alert-success alert-dismissible fade show" role="alert">
             Dein Wunsch wurde korrekt gespeichert
           </div>
           <div v-if="error" class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ error }}
           </div>
-          <WishUpdateForm v-if="currentWish" :wish="currentWish" @update-gift="updateGift"/>
+          <WishUpdateForm v-if="gift" @update-gift="updateGift"/>
         </div>
       </div>
       <!-- Create -->
@@ -222,10 +222,14 @@ onMounted(function () {
     el.addEventListener('hidden.bs.offcanvas', function () {
       currentWish.value = null;
       error.value = null;
-      giftStore.status.create.isCompleted = false;
-      giftStore.status.create.isLoading = false;
-      giftStore.status.update.isCompleted = false;
-      giftStore.status.update.isLoading = false;
+      status.create.isCompleted = false;
+      status.create.isLoading = false;
+      status.update.isCompleted = false;
+      status.update.isLoading = false;
+      gift.title = null
+      gift.description = null
+      gift.link = null
+      gift.uuid = null
     })
   })
 
@@ -235,17 +239,21 @@ onMounted(function () {
       currentWish.value = null;
       giftStore.status.delete.isCompleted = false;
       giftStore.status.delete.isLoading = false;
+      gift.title = null
+      gift.description = null
+      gift.link = null
     })
   })
 })
 
-// ----------- Ref
-const currentWish = ref(null);
-const gifts = ref(props.giftList)
-const error = ref(null)
-
 // ----------- Stores
 const giftStore = useGiftStore()
+
+// ----------- Ref
+const currentWish = ref(null);
+const list = ref(props.giftList)
+const { gift, status } = giftStore
+const error = ref(null)
 
 
 // ----------- Methods
@@ -253,31 +261,38 @@ const openModalDelete = (wish) => {
   currentWish.value = wish;
 };
 
-const openOffCanvas = (wish) => {
-  if (wish) {
-    currentWish.value = wish;
+const openOffCanvas = (currentGift) => {
+  if (currentGift) {
+    gift.title = currentGift.title;
+    gift.description = currentGift.description;
+    gift.link = currentGift.link;
+    gift.uuid = currentGift.uuid;
   }
 };
 
 const updateGift = async function (gift) {
-  giftStore.status.update.isCompleted = false
-  giftStore.status.update.isLoading = true
-  const newGift = {
-    title: gift.title.value,
-    description: gift.description.value,
-    link : gift.link.value === undefined ? null : gift.link.value,
-    uuid : gift.uuid
-  };
+  status.update.isCompleted = false
+  status.update.isLoading = true
 
-  fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid, newGift)
+  fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + gift.uuid, gift)
       .then(() => {
-        let currentListToRaw = toRaw(gifts.value);
+        let currentListToRaw = toRaw(list.value);
         const newList = currentListToRaw.map(function(el) {
-          return el.uuid === newGift.uuid ? newGift : el;
+          console.log(el.uuid + ' | ' + gift.uuid)
+          if (el.uuid === gift.uuid) {
+            return {
+              title: gift.title,
+              description: gift.description,
+              link: gift.link,
+              uuid: gift.uuid
+            };
+          }
+          return el;
         })
-        gifts.value = newList;
-        giftStore.status.update.isLoading = false
-        giftStore.status.update.isCompleted = true
+        console.log(newList)
+        list.value = newList;
+        status.update.isLoading = false
+        status.update.isCompleted = true
         error.value = false
       })
       .catch((e) => {
@@ -293,24 +308,23 @@ const deleteGift = async function () {
   await fetcher.delete(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + currentWish.value.uuid);
   giftStore.status.delete.isCompleted = true
   giftStore.status.delete.isLoading = false
-  let currentListToRaw = toRaw(gifts.value);
-  gifts.value = currentListToRaw.filter(el => el.uuid !== currentWish.value.uuid)
+  let currentListToRaw = toRaw(list.value);
+  list.value = currentListToRaw.filter(el => el.uuid !== currentWish.value.uuid)
 }
 
 const createGift = async function (gift) {
   giftStore.status.create.isCompleted = false
   giftStore.status.create.isLoading = true
-  const newGift = {
-    title: gift.title.value,
-    description: gift.description.value,
-    link: gift.link.value
-  };
 
-  fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', newGift)
+  fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/gift', gift)
       .then((response) => {
-        gifts.value.push(response)
+        list.value.push(response)
         giftStore.status.create.isLoading = false
         giftStore.status.create.isCompleted = true
+        gift.title = null
+        gift.description = null
+        gift.link = null
+        gift.uuid = null
         error.value = false
       })
       .catch((e) => {
