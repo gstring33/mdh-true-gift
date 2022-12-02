@@ -7,7 +7,7 @@
   </div>
   <div v-else>
     <Members :totalUsers="total" :users="users"/>
-    <List :giftList="gifts" />
+    <List :list="list" />
   </div>
 </template>
 
@@ -21,7 +21,7 @@ import { useAuthStore } from "@/stores/auth.store.js";
 
 const total = ref(null)
 const users = ref(null)
-const gifts = ref(null)
+const list = ref(null)
 const ready = ref(false)
 
 onBeforeMount(async () => {
@@ -40,7 +40,7 @@ onBeforeMount(async () => {
     })
     total.value = usersData.total
     users.value = usersArr
-    gifts.value = listData.gifts
+    list.value = listData
     ready.value = true
 
   } catch (error) {

@@ -212,7 +212,7 @@ import { useGiftStore } from "@/stores/gift.store";
 
 // ----------- Props
 const props = defineProps({
-  giftList: Object
+  list: Object
 })
 
 // ----------- Life Cycle
@@ -251,7 +251,9 @@ const giftStore = useGiftStore()
 
 // ----------- Ref
 const currentWish = ref(null);
-const list = ref(props.giftList)
+const list = ref(props.list.gifts)
+const isPublished = ref(props.list.isPublished)
+const uuid = ref(props.list.uuid)
 const { gift, status } = giftStore
 const error = ref(null)
 
@@ -277,8 +279,8 @@ const updateGift = async function (gift) {
   fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/gift/' + gift.uuid, gift)
       .then(() => {
         let currentListToRaw = toRaw(list.value);
+        console.log(currentListToRaw)
         const newList = currentListToRaw.map(function(el) {
-          console.log(el.uuid + ' | ' + gift.uuid)
           if (el.uuid === gift.uuid) {
             return {
               title: gift.title,
@@ -289,7 +291,6 @@ const updateGift = async function (gift) {
           }
           return el;
         })
-        console.log(newList)
         list.value = newList;
         status.update.isLoading = false
         status.update.isCompleted = true
