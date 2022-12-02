@@ -40,7 +40,7 @@ onBeforeMount(async () => {
     })
     total.value = usersData.total
     users.value = usersArr
-    gifts.value = listData
+    gifts.value = listData.gifts
     ready.value = true
 
   } catch (error) {
