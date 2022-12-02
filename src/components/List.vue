@@ -110,12 +110,15 @@
           aria-hidden="true"
       >
         <div class="modal-dialog">
-          <div class="modal-content">
+          <div v-if="!isPublished" class="modal-content">
             <div class="modal-header bg-warning">
               <h5 class="modal-title" id="confirmHeaderModalLabel"><font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" /> Achtung</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              <div v-if="error" class="alert alert-warning alert-dismissible fade show">
+                {{ error }}
+              </div>
               <p class="lead">Wenn du die Veröffentlichung bestätigst:</p>
               <ul>
                 <li>wird deine Liste <b>per E-Mail an deinen Partner gesendet</b>, ist auch <b>auf seinem Dashboard verfügbar.</b></li>
@@ -129,15 +132,24 @@
                   type="button"
                   class="btn btn-secondary"
                   data-bs-dismiss="modal"
+                  :disabled="isPublishing"
               >
                 <font-awesome-icon :icon="['fas', 'xmark']" class="me-2"/>Nein
               </button>
               <button
                   @click="publishList()"
                   type="button"
-                  class="btn btn-success">
-                <font-awesome-icon :icon="['fas', 'check']" class="me-2" />Veröffentlichen
+                  class="btn btn-success"
+                  :disabled="isPublishing"
+              >
+                <span v-if="isPublishing" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <font-awesome-icon v-else :icon="['fas', 'check']" class="me-2" />Veröffentlichen
               </button>
+            </div>
+          </div>
+          <div v-else class="modal-content">
+            <div v-if="isPublished" class="alert alert-success alert-dismissible fade show mt-3 mx-3" role="alert">
+              Deine Liste wurde korrekt veröffentlichen
             </div>
           </div>
         </div>
@@ -239,11 +251,12 @@ onMounted(function () {
   modals.forEach((el) => {
     el.addEventListener('hidden.bs.modal', function () {
       currentWish.value = null;
-      giftStore.status.delete.isCompleted = false;
-      giftStore.status.delete.isLoading = false;
+      status.delete.isCompleted = false;
+      status.delete.isLoading = false;
       gift.title = null
       gift.description = null
       gift.link = null
+      isPublishing.value = false
     })
   })
 })
@@ -255,7 +268,7 @@ const giftStore = useGiftStore()
 const currentWish = ref(null);
 const list = ref(props.list.gifts)
 const isPublished = ref(props.list.isPublished)
-const uuid = ref(props.list.uuid)
+const isPublishing = ref(false)
 const { gift, status } = giftStore
 const error = ref(null)
 
@@ -340,6 +353,19 @@ const createGift = async function (gift) {
 }
 
 const publishList = async function () {
-  isPublished.value = true
+  isPublishing.value = true
+  error.value = false
+
+  fetcher.put(import.meta.env.VITE_API_BASE_URL + '/api/list/' + props.list.uuid, { isPublished: true })
+      .then(() => {
+        isPublishing.value = false
+        isPublished.value = true
+      })
+      .catch((e) => {
+        isPublishing.value = false
+        isPublished.value = false
+        error.value = ([400,404].includes(e.status)) ? e.data.error : "Aus internen Gründen wurde Ihr Liste nicht veröffentlichen";
+  })
+
 }
 </script>
