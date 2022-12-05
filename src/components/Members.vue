@@ -21,7 +21,8 @@
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-success">
+        <button @click="selectPartner" type="button" class="btn btn-success">
+          <span v-if="isSelecting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           Einen Partner auswählen
         </button>
       </div>
@@ -32,22 +33,42 @@
 <script setup>
 
 import MemberItem from './MemberItem.vue'
-import {computed} from "vue";
+import {computed, ref} from "vue";
+import { fetcher } from "@/helpers/fetcher.js";
+
 
 const props = defineProps({
   members : Object,
   isPartnerSelected: Boolean,
   total: Number
-})
+});
+
+const isSelecting = ref(null);
+const isPartnerSelected = ref(props.isPartnerSelected);
+const members = ref(props.members);
 
 const partner = computed(() => {
-  console.log(props.members[0])
-    return props.isPartnerSelected && props.members.length === 1 ? props.members[0] : null;
+    return isPartnerSelected.value && members.value.length === 1 ? members.value[0] : null;
 
 })
 
 const partnerList = computed(() => {
-  return props.isPartnerSelected && props.members.length ===1 && props.members?.list?.gifts.list > 0 ? props.members.list : null;
+  return isPartnerSelected.value && members.value.length ===1 && members.value?.list?.gifts.list > 0 ? members.value.list : null;
 })
+
+const selectPartner = async function () {
+  isSelecting.value = true
+  await fetcher.post(import.meta.env.VITE_API_BASE_URL + '/api/user/select-partner')
+      .then((response)=> {
+        console.log(response)
+        isPartnerSelected.value = true;
+        members.value = response.users
+        isSelecting.value = false;
+      })
+      .catch((e) => {
+        console.log(e)
+      });
+
+}
 
 </script>
