@@ -66,9 +66,9 @@ const selectPartner = async function () {
         isSelecting.value = false;
       })
       .catch((e) => {
+        isSelecting.value = false
         console.log(e)
       });
 
 }
-
 </script>
