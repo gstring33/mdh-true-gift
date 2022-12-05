@@ -21,7 +21,7 @@
             </div>
           </div>
         </div>
-        <button @click="selectPartner" type="button" class="btn btn-success">
+        <button @click="selectPartner" type="button" class="btn btn-success" :disabled="isSelecting">
           <span v-if="isSelecting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           Einen Partner auswählen
         </button>
