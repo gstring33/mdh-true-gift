@@ -45,12 +45,15 @@ onBeforeMount(async () => {
 const membersFormatted = computed(() => {
   const membersArr  = []
   let membersLine = [];
+  let partnerRemaining = total.value;
   if (isPartnerSelected.value) {
     return members
   }
   members.forEach((p) => {
     membersLine.push(p)
-    if(membersLine.length === 3 || (membersLine.length === total.value && total.value < 3) ) {
+    partnerRemaining--
+
+    if (membersLine.length === 3 || partnerRemaining === 0) {
       membersArr.push(membersLine)
       membersLine = []
     }
