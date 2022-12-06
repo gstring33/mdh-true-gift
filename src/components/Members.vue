@@ -5,9 +5,22 @@
         {{ partner.firstname }}
         <small class="lead">wird dein Geschenk bekommen </small>
       </h2>
-      <div v-if="!partnerList" class="ps-3 mt-3 text-warning" role="alert">
+      <div v-if="!partnerList && partner" class="ps-3 mt-3 text-warning" role="alert">
         <font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-1"/> Noch ein wenig Geduld... <br>
         <p class="mt-2">{{ partner.firstname }} hat ihre/seine Liste noch nicht veröffentlicht. Bitte logge dich später erneut ein, um {{ partner.firstname}}s Liste zu sehen.</p>
+      </div>
+      <div v-else class="mt-5">
+        <ol class="list-group list-group-numbered">
+          <li v-for="(gift, index) in partner.list.gifts" :key="'gift-'+index" class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold mb-3">{{ gift.title }}</div>
+              <div>{{ gift.description }}</div>
+              <div v-if="gift.link" class="mt-3">
+                <a :href="gift.link" target="_blank" >Online sehen</a>
+              </div>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
 
@@ -49,11 +62,12 @@ const members = ref(props.members);
 
 const partner = computed(() => {
     return isPartnerSelected.value && members.value.length === 1 ? members.value[0] : null;
-
 })
 
 const partnerList = computed(() => {
-  return isPartnerSelected.value && members.value.length ===1 && members.value?.list?.gifts.list > 0 ? members.value.list : null;
+  if (isPartnerSelected.value && partner.value) {
+    return partner.value?.list?.isPublished ? partner.value.list.gifts : null;
+  }
 })
 
 const selectPartner = async function () {
@@ -66,7 +80,7 @@ const selectPartner = async function () {
         isSelecting.value = false;
       })
       .catch((e) => {
-        isSelecting.value = false
+        isSelecting.value = false;
         console.log(e)
       });
 
